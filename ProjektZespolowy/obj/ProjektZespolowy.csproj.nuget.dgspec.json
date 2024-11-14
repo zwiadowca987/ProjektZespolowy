@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\ProjektZespolowy\\ProjektZespolowy.csproj": {}
+    "C:\\Users\\Gamer\\Desktop\\ProjektZespolowy\\ProjektZespolowy\\ProjektZespolowy.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\ProjektZespolowy\\ProjektZespolowy.csproj": {
+    "C:\\Users\\Gamer\\Desktop\\ProjektZespolowy\\ProjektZespolowy\\ProjektZespolowy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\ProjektZespolowy\\ProjektZespolowy.csproj",
+        "projectUniqueName": "C:\\Users\\Gamer\\Desktop\\ProjektZespolowy\\ProjektZespolowy\\ProjektZespolowy.csproj",
         "projectName": "ProjektZespolowy",
-        "projectPath": "F:\\Projects\\ProjektZespolowy\\ProjektZespolowy.csproj",
-        "packagesPath": "C:\\Users\\matsz\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\ProjektZespolowy\\obj\\",
+        "projectPath": "C:\\Users\\Gamer\\Desktop\\ProjektZespolowy\\ProjektZespolowy\\ProjektZespolowy.csproj",
+        "packagesPath": "C:\\Users\\Gamer\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Gamer\\Desktop\\ProjektZespolowy\\ProjektZespolowy\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\matsz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Gamer\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -85,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -34,6 +34,9 @@ namespace ProjektZespolowy.Data
                 .WithMany(Customer => Customer.Orders)
                 .HasForeignKey(Customer => Customer.Id);
         }
-
+        public DbSet<ProjektZespolowy.Models.Costs> Costs { get; set; } = default!;
+        
+        // Add-Migration Name
+        // Update-Database
     }
 }

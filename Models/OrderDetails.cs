@@ -4,6 +4,8 @@ namespace ProjektZespolowy.Models
 {
     public class OrderDetails
     {
+        [Key, Required]
+        public int Id { get; set; }
         public int quantity { get; set; }
 
         // Relations

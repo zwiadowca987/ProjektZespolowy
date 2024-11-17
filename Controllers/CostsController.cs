@@ -153,5 +153,19 @@ namespace ProjektZespolowy.Controllers
         {
             return _context.Costs.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public List<object> GetCostsData()
+        {
+            List<object> data = new List<object>();
+
+            List<String> labels = _context.Costs.Select(p=>p.Name).ToList();
+            data.Add(labels);
+
+            List<double> CostsNumbers = _context.Costs.Select(p => p.Cost).ToList();
+            data.Add(CostsNumbers);
+
+            return data;
+        }
     }
 }

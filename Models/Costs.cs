@@ -7,6 +7,7 @@ namespace ProjektZespolowy.Models
         [Key, Required]
         public int Id { get; set; }
         public String Name { get; set; }
-        public double Cost { get; set; }
+        public decimal Cost { get; set; }
+        public DateOnly Period { get; set; }
     }
 }

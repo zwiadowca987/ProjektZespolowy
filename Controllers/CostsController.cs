@@ -54,7 +54,7 @@ namespace ProjektZespolowy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Cost")] Costs costs)
+        public async Task<IActionResult> Create([Bind("Id,Name,Cost,Period")] Costs costs)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace ProjektZespolowy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Cost")] Costs costs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Cost,Period")] Costs costs)
         {
             if (id != costs.Id)
             {
@@ -162,7 +162,7 @@ namespace ProjektZespolowy.Controllers
             List<String> labels = _context.Costs.Select(p=>p.Name).ToList();
             data.Add(labels);
 
-            List<double> CostsNumbers = _context.Costs.Select(p => p.Cost).ToList();
+            List<decimal> CostsNumbers = _context.Costs.Select(p => p.Cost).ToList();
             data.Add(CostsNumbers);
 
             return data;

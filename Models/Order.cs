@@ -6,8 +6,8 @@ namespace ProjektZespolowy.Models
     {
         [Key, Required]
         public int Id { get; set; }
-        public DateTime date { get; set; }
-        public decimal price { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Price { get; set; }
 
         // Relations
         public int CustomerId { get; set; }

@@ -6,7 +6,7 @@ namespace ProjektZespolowy.Models
     {
         [Key, Required]
         public int Id { get; set; }
-        public int quantity { get; set; }
+        public int Quantity { get; set; }
 
         // Relations
         public int OrderId { get; set; }

@@ -47,38 +47,102 @@
     </tbody>
 </table>
 
-<div class="row">
-    <div class="col-1">
-        <label><b>Chart Type</b></label>
+<div class="">
+    <div class="d-flex align-items-center justify-content-around">
+        <div class="col-4"></div>
+        
+        <div class="col-2">
+            <label><b>Chart Type</b></label>
+        </div>
+
+        <div class="col-2">
+            <select id="ChartType" class="form-control">
+                <option selected>-Select Chart Type-</option>
+                <option>bar</option>
+                <option>line</option>
+                <option>pie</option>
+                <option>doughnut</option>
+            </select>
+        </div>
+
+        <div class="col-4"></div>
     </div>
 
-    <div class="col-2">
-        <select id="ChartType" class="form-control">
-            <option selected>-Select Chart Type-</option>
-            <option>bar</option>
-            <option>line</option>
-            <option>pie</option>
-            <option>doughnut</option>
-        </select>
+    <div class="d-flex align-items-center justify-content-around">
+        <div class="col-4"></div>
+
+        <div class="col-2">
+            <label><b>Miesiąc</b></label>
+        </div>
+
+        <div class="col-2">
+            <select id="month" class="form-control">
+                <option selected>-Wybierz Miesiąc-</option>
+            </select>
+        </div>
+
+        <div class="col-4"></div>
     </div>
 
-    <div class="col-4">
+    <div class="d-flex align-items-center justify-content-around">
+        <div class="col-4"></div>
+
+        <div class="col-2">
+            <label><b>Rok</b></label>
+        </div>
+
+        <div class="col-2">
+            <select id="year" class="form-control">
+                <option selected>-Select Chart Type-</option>
+                <option>bar</option>
+                <option>line</option>
+                <option>pie</option>
+                <option>doughnut</option>
+            </select>
+        </div>
+
+        <div class="col-4"></div>
+    </div>
+
+    <div class="">
         <input id="showChartBtn" value="Show Graph" type="button" />
     </div>
 </div>
 
-<div id="ChartView">
-    <canvas id="myChart"></canvas>
-</div>
-
 <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Costs/GetCostsMonths",
+            type: "POST",
+            success: function (data) {
+                var monthSelect = $("#month");
+                monthSelect.empty();
+                monthSelect.append('<option selected>-Wybierz Miesiąc-</option>');
+
+                $.each(data, function (index, item) {
+                    monthSelect.append($('<option></option>').val(item.value).text(item.text));
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error retrieving month options:", textStatus, errorThrown);
+            }
+        });
+    });
+
     $(function () {
         $('#showChartBtn').click(function () {
             var ChartType = $('#ChartType').val();
-            var ChartView = document.getElementById('ChartView');
+            var Month = $('#month').val();
+            var Year = $('#year').val();
 
-            ChartView.innerHTML = '';
-            $('#ChartView').append('<canvas id="myChart" style="max-width:400px; max-height:400px"></canvas>');
+            if (ChartType === '-Select Chart Type-') {
+                alert('Należy wybrać typ wykresu');
+                return;
+            }
+
+            if (Month !== '-Wybierz Miesiąc-') {
+                alert('not select');
+            }
 
             $.ajax({
                 type: "POST",
@@ -86,34 +150,39 @@
                 data: "",
                 contextType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: OnSuccessResult,
-                error: OnError
-            });
+                success: function (data) {
+                    var _data = data;
+                    var _chartLabels = _data[0];
+                    var _chartData = _data[1];
 
-            function OnSuccessResult(data) {
-                var _data = data;
-                var _chartLabels = _data[0];
-                var _chartData = _data[1];
+                    const win = window.open('', 'Wykres', 'height=400,width=400');
+                    const canvas = win.document.createElement('canvas');
+                    canvas.id = 'myChart';
+                    canvas.width = 400;
+                    canvas.height = 400;
+                    win.document.body.appendChild(canvas);
 
-                new Chart('myChart', {
-                    type: ChartType,
-                    data: {
-                        labels: _chartLabels,
-                        datasets: [{
-                            label: 'PLN',
-                            data: _chartData,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                    new Chart(win.document.getElementById('myChart'), {
+                        type: ChartType,
+                        data: {
+                            labels: _chartLabels,
+                            datasets: [{
+                                label: 'PLN',
+                                data: _chartData,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
-            }
+                    });
+                },
+                error: OnError
+            });
 
             function OnError(err) {
 

@@ -168,33 +168,5 @@ namespace ProjektZespolowy.Controllers
 
             return data;
         }
-
-        [HttpPost]
-        public List<object> GetCostsData(int Month)
-        {
-            List<object> data = new List<object>();
-
-            List<String> labels = _context.Costs.Select(p => p.Name).ToList();
-            data.Add(labels);
-
-            List<decimal> CostsNumbers = _context.Costs.Select(p => p.Cost).ToList();
-            data.Add(CostsNumbers);
-
-            return data;
-        }
-
-        [HttpPost]
-        public IActionResult GetCostsMonths()
-        {
-            var monthNames = Enumerable.Range(1, 12)
-                .Select(i => new SelectListItem
-                {
-                    Value = i.ToString(),
-                    Text = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
-                })
-                .ToList();
-
-            return Json(monthNames); // Return JSON data for population
-        }
     }
 }

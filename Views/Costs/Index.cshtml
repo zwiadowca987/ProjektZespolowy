@@ -47,101 +47,52 @@
     </tbody>
 </table>
 
-<div class="">
-    <div class="d-flex align-items-center justify-content-around">
-        <div class="col-4"></div>
-        
-        <div class="col-2">
-            <label><b>Chart Type</b></label>
-        </div>
+<div class="d-flex align-items-center justify-content-around">
+    <div class="col-2"></div>
 
-        <div class="col-2">
-            <select id="ChartType" class="form-control">
-                <option selected>-Select Chart Type-</option>
-                <option>bar</option>
-                <option>line</option>
-                <option>pie</option>
-                <option>doughnut</option>
-            </select>
-        </div>
-
-        <div class="col-4"></div>
+    <div class="col-2">
+        <label><b>Typ Wykresu</b></label>
     </div>
 
-    <div class="d-flex align-items-center justify-content-around">
-        <div class="col-4"></div>
-
-        <div class="col-2">
-            <label><b>Miesiąc</b></label>
-        </div>
-
-        <div class="col-2">
-            <select id="month" class="form-control">
-                <option selected>-Wybierz Miesiąc-</option>
-            </select>
-        </div>
-
-        <div class="col-4"></div>
+    <div class="col-2">
+        <select id="ChartType" class="form-control">
+            <option selected>-Wybierz Typ Wykresu-</option>
+            <option>Wykres Kolumnowy</option>
+            <option>Wykres Liniowy</option>
+            <option>Wykres Kołowy</option>
+            <option>Wykres Pierścieniowy</option>
+        </select>
     </div>
 
-    <div class="d-flex align-items-center justify-content-around">
-        <div class="col-4"></div>
+    <div class="col-2"></div>
 
-        <div class="col-2">
-            <label><b>Rok</b></label>
-        </div>
-
-        <div class="col-2">
-            <select id="year" class="form-control">
-                <option selected>-Select Chart Type-</option>
-                <option>bar</option>
-                <option>line</option>
-                <option>pie</option>
-                <option>doughnut</option>
-            </select>
-        </div>
-
-        <div class="col-4"></div>
-    </div>
-
-    <div class="">
+    <div class="col-2">
         <input id="showChartBtn" value="Show Graph" type="button" />
     </div>
+
+    <div class="col-3"></div>
 </div>
 
 <script>
-    $(document).ready(function () {
-        $.ajax({
-            url: "/Costs/GetCostsMonths",
-            type: "POST",
-            success: function (data) {
-                var monthSelect = $("#month");
-                monthSelect.empty();
-                monthSelect.append('<option selected>-Wybierz Miesiąc-</option>');
-
-                $.each(data, function (index, item) {
-                    monthSelect.append($('<option></option>').val(item.value).text(item.text));
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error retrieving month options:", textStatus, errorThrown);
-            }
-        });
-    });
-
     $(function () {
         $('#showChartBtn').click(function () {
-            var ChartType = $('#ChartType').val();
-            var Month = $('#month').val();
-            var Year = $('#year').val();
-
-            if (ChartType === '-Select Chart Type-') {
-                alert('Należy wybrać typ wykresu');
-                return;
-            }
-
-            if (Month !== '-Wybierz Miesiąc-') {
-                alert('not select');
+            var ChartTypeInput = $('#ChartType').val();
+            switch (ChartTypeInput) {
+                case 'Wykres Kolumnowy':
+                    var ChartType = 'bar';
+                    break;
+                case 'Wykres Liniowy':
+                    var ChartType = 'line';
+                    break;
+                case 'Wykres Kołowy':
+                    var ChartType = 'pie';
+                    break;
+                case 'Wykres Pierścieniowy':
+                    var ChartType = 'doughnut';
+                    break;
+                case '-Wybierz Typ Wykresu-':
+                    alert('Należy wybrać typ wykresu');
+                    return;
             }
 
             $.ajax({
@@ -187,6 +138,7 @@
             function OnError(err) {
 
             }
+            
         })
     })
 </script>

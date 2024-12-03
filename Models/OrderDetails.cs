@@ -5,7 +5,8 @@ namespace ProjektZespolowy.Models
     public class OrderDetails
     {
         [Key, Required]
-        public int Id { get; set; }
+        public int OrderDetailsId { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Ilość musi być większa od 0.")]
         public int Quantity { get; set; }
 
         // Relations

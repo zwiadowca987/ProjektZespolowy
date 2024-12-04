@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Raport>
+
+@{
+    ViewData["Title"] = "Rejestr Raportów";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+
+ 
+    <div class="card shadow-sm border-primary">
+        <div class="card-body">
+            <div class="table-responsive" style="border-radius: 10px; overflow: hidden;">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID Raportu</th>
+                            <th>Typ</th>
+                            <th>Data Wygenerowania</th>
+                            <th>Uwagi</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var raport in Model)
+                        {
+                            <tr>
+                                <td>@raport.RaportId</td>
+                                <td>@raport.Typ</td>
+                                <td>@raport.DataWygenerowania.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td>@raport.Uwagi</td>
+                                <td class="d-flex gap-2">
+                                    <a asp-action="Details" asp-route-id="@raport.RaportId" class="btn btn-info btn-sm">
+                                        <i class="bi bi-eye"></i> Szczegóły
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@raport.RaportId" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil"></i> Edytuj
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@raport.RaportId" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Usuń
+                                    </a>
+                                
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

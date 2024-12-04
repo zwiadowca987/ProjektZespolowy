@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Supplier>
+
+@{
+    ViewData["Title"] = "Lista Dostawców";
+}
+
+<h1 class="text-center my-4">Lista Dostawców</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn btn-primary">Dodaj Nowego Dostawcę</a>
+    <input type="text" id="searchBox" class="form-control w-50" placeholder="Wyszukaj dostawcę..." />
+</div>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID Dostawcy</th>
+            <th scope="col">Nazwa Dostawcy</th>
+            <th scope="col">Adres</th>
+            <th scope="col">Kontakt</th>
+            <th scope="col" class="text-center">Akcje</th>
+        </tr>
+    </thead>
+    <tbody id="warehouseTableBody">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="filterable">@item.DostawcaID</td>
+                <td class="filterable">@item.NazwaDostawcy</td>
+                <td class="filterable">@item.Adres</td>
+                <td class="filterable">@item.Kontakt</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.DostawcaID" class="btn btn-warning btn-sm mx-1">Edytuj</a>
+                    <a asp-action="Details" asp-route-id="@item.DostawcaID" class="btn btn-info btn-sm mx-1">Szczegóły</a>
+                    <a asp-action="Delete" asp-route-id="@item.DostawcaID" class="btn btn-danger btn-sm mx-1">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchBox').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#warehouseTableBody tr');
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('.filterable');
+                const rowText = Array.from(columns).map(col => col.textContent.toLowerCase()).join(' ');
+                row.style.display = rowText.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+}

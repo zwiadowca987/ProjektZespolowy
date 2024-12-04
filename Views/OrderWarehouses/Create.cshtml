@@ -1,0 +1,150 @@
+﻿@model ProjektZespolowy.Models.OrderWarehouse
+
+@{
+    ViewData["Title"] = "Utwórz Zamówienie Magazynowe";
+}
+
+<h1 class="text-center mt-4">Utwórz Zamówienie Magazynowe</h1>
+
+<div class="card mt-5 shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card-header bg-primary text-white text-center">
+        <h4>Formularz Zamówienia</h4>
+    </div>
+    <div class="card-body">
+        <form id="createOrderForm" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <div class="mb-3">
+                <label asp-for="Data" class="form-label"></label>
+                <input asp-for="Data" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" readonly />
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProduktId" class="form-label"></label>
+                <select asp-for="ProduktId" class="form-select" asp-items="ViewBag.ProduktId" onchange="fetchProductName(this)"></select>
+                <span asp-validation-for="ProduktId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NazwaProduktu" class="form-label"></label>
+                <input asp-for="NazwaProduktu" class="form-control nazwa-produktu" readonly />
+                <span asp-validation-for="NazwaProduktu" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DostawcaID" class="form-label"></label>
+                <select asp-for="DostawcaID" class="form-select" asp-items="ViewBag.DostawcaID"></select>
+                <span asp-validation-for="DostawcaID" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DoZamowienia" class="form-label"></label>
+                <input asp-for="DoZamowienia" class="form-control" />
+                <span asp-validation-for="DoZamowienia" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="WartoscZamowienia" class="form-label"></label>
+                <input asp-for="WartoscZamowienia" class="form-control" type="text" />
+                <span asp-validation-for="WartoscZamowienia" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="StatusDostawy" class="form-label"></label>
+                <select asp-for="StatusDostawy" class="form-select">
+                    <option value="nowe">Nowe</option>
+                    <option value="zlecone">Zlecone</option>
+                    <option value="planowane">Planowane</option>
+                    <option value="ukonczone">Ukończone</option>
+                    <option value="anulowane">Anulowane</option>
+                    <option value="nieznane">Nieznane</option>
+                </select>
+                <span asp-validation-for="StatusDostawy" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Uwagi" class="form-label"></label>
+                <textarea asp-for="Uwagi" class="form-control"></textarea>
+                <span asp-validation-for="Uwagi" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Utwórz" class="btn btn-success me-2" />
+                <a asp-action="Index" class="btn btn-secondary">Powrót do Listy</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function fetchProductName(selectElement) {
+            const productId = selectElement.value;
+            const nameField = document.querySelector(".nazwa-produktu");
+
+            if (!productId) {
+                nameField.value = "";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/OrderWarehouses/GetProductName?id=${productId}`);
+                if (response.ok) {
+                    const productName = await response.text();
+                    nameField.value = productName || "Nie znaleziono produktu";
+                } else {
+                    nameField.value = "Nie znaleziono produktu";
+                }
+            } catch (error) {
+                nameField.value = "Błąd połączenia";
+            }
+        }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('createOrderForm');
+                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                    const alertModalMessage = document.getElementById('alertModalMessage');
+                    const alertModalLabel = document.getElementById('alertModalLabel');
+
+                    form.addEventListener('submit', async function (event) {
+                        event.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        try {
+                            const response = await fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                                }
+                            });
+
+                            if (response.ok) {
+                                showModal('success', '✔️ Zamówienie zostało utworzone.');
+                                setTimeout(() => window.location.href = '@Url.Action("Index", "OrderWarehouses")', 2000);
+                            } else {
+                                const errorText = await response.text();
+                                showModal('danger', `❌ Nie udało się utworzyć zamówienia. Szczegóły: ${errorText}`);
+                            }
+                        } catch (error) {
+                            showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                        }
+                    });
+
+                    function showModal(type, message) {
+                        alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                        alertModalMessage.innerHTML = message;
+                        alertModal.show();
+                    }
+                });
+    </script>
+}

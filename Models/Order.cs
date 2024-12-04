@@ -5,9 +5,10 @@ namespace ProjektZespolowy.Models
     public class Order
     {
         [Key, Required]
-        public int Id { get; set; }
+        public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public decimal Price { get; set; }
+        public string Status { get; set; }
 
         // Relations
         public int CustomerId { get; set; }

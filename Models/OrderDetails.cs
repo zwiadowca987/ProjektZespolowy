@@ -6,6 +6,7 @@ namespace ProjektZespolowy.Models
     {
         [Key, Required]
         public int Id { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Ilość musi być większa od 0.")]
         public int Quantity { get; set; }
 
         // Relations

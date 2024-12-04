@@ -1,0 +1,31 @@
+﻿@model ProjektZespolowy.Models.Supplier
+
+@{
+    ViewData["Title"] = "Szczegóły Dostawcy";
+}
+
+<div class="container my-5">
+    <h1 class="text-center">Szczegóły Dostawcy</h1>
+    <p class="text-muted text-center">Przejrzyj informacje o wybranym dostawcy.</p>
+    <hr />
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h4 class="card-title">Dane Dostawcy</h4>
+            <dl class="row mt-3">
+                <dt class="col-sm-4 text-secondary">Nazwa Dostawcy</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.NazwaDostawcy)</dd>
+
+                <dt class="col-sm-4 text-secondary">Adres</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Adres)</dd>
+
+                <dt class="col-sm-4 text-secondary">Kontakt</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Kontakt)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <a asp-action="Edit" asp-route-id="@Model?.DostawcaID" class="btn btn-primary me-3">Edytuj</a>
+        <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+    </div>
+</div>

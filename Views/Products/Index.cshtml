@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Product>
+
+@{
+    ViewData["Title"] = "Produkty";
+}
+
+<div class="d-flex">
+    <!-- Main Content -->
+    <div class="container-fluid p-4" style="margin-right: 250px;">
+        <!-- Nagłówek -->
+        <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+
+        <!-- Pole wyszukiwania -->
+        <div class="mb-4">
+            <div class="d-flex justify-content-center">
+                <input type="text" id="searchBox" class="form-control shadow-sm" style="width: 100%; max-width: 900px;" placeholder="Wyszukaj produkt..." />
+            </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-responsive" style="border-radius: 10px; overflow: hidden;">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Produkt ID</th>
+                        <th>Nazwa Produktu</th>
+                        <th>Opis</th>
+                        <th>Producent</th>
+                        <th>Cena</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td class="filterable">@item.ProduktId</td>
+                            <td class="filterable">@item.NazwaProduktu</td>
+                            <td class="filterable">@item.Opis</td>
+                            <td class="filterable">@item.Producent</td>
+                            <td class="filterable">@item.Cena.ToString("C")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@item.ProduktId" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i> Edytuj</a>
+                                    <a asp-action="Details" asp-route-id="@item.ProduktId" class="btn btn-sm btn-info"><i class="bi bi-eye"></i> Szczegóły</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ProduktId" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Usuń</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <nav class="bg-light border rounded shadow-sm position-fixed" style="width: 250px; height: 85vh; top: 10%; right: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-secondary mx-auto mb-2" style="width: 80px; height: 80px;"></div>
+                <p class="fw-bold text-dark">Witaj!</p>
+            </div>
+            <hr />
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a asp-action="Create" class="btn btn-primary w-100"><i class="bi bi-plus-lg"></i> Dodaj Nowy Produkt</a>
+                </li>
+            </ul>
+        </div>
+        
+    </nav>
+</div>
+
+@section Scripts {
+    <script>
+        // Wyszukiwanie w tabeli
+        document.getElementById('searchBox').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#productTableBody tr');
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('.filterable');
+                const rowText = Array.from(columns).map(col => col.textContent.toLowerCase()).join(' ');
+                if (rowText.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

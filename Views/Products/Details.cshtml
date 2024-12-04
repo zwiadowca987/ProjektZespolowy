@@ -1,0 +1,38 @@
+﻿@model ProjektZespolowy.Models.Product
+
+@{
+    ViewData["Title"] = "Szczegóły Produktu";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">@ViewData["Title"]</h1>
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Informacje o produkcie</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4 font-weight-bold">Nazwa Produktu</dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.NazwaProduktu)
+                </dd>
+                <dt class="col-sm-4 font-weight-bold">Opis</dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Opis)
+                </dd>
+                <dt class="col-sm-4 font-weight-bold">Producent</dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Producent)
+                </dd>
+                <dt class="col-sm-4 font-weight-bold">Cena</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-success">@Html.DisplayFor(model => model.Cena) zł</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a asp-action="Edit" asp-route-id="@Model?.ProduktId" class="btn btn-warning me-2">Edytuj</a>
+        <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+    </div>
+</div>

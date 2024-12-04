@@ -1,0 +1,103 @@
+﻿@model ProjektZespolowy.Models.Warehouse
+
+@{
+    ViewData["Title"] = "Dodaj";
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 30rem;">
+        <h2 class="text-center mb-4"></h2>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NazwaProduktu" class="form-label">Nazwa Produktu</label>
+                <select asp-for="NazwaProduktu" class="form-control" asp-items="ViewBag.NazwaProduktu"></select>
+                <span asp-validation-for="NazwaProduktu" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DostepnaIlosc" class="form-label">Dostępna Ilość</label>
+                <input asp-for="DostepnaIlosc" class="form-control" />
+                <span asp-validation-for="DostepnaIlosc" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Pojemnosc" class="form-label">Pojemność</label>
+                <input asp-for="Pojemnosc" class="form-control" />
+                <span asp-validation-for="Pojemnosc" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center">
+                <input type="submit" value="Dodaj" class="btn btn-primary w-100" />
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <a asp-action="Index" class="btn btn-link">Powrót do listy</a>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+    @section Scripts {
+    <script>
+          document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('warehouseForm');
+                const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                const alertModalMessage = document.getElementById('alertModalMessage');
+                const alertModalLabel = document.getElementById('alertModalLabel');
+
+                form.addEventListener('submit', async function (event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    try {
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            }
+                        });
+
+                        if (response.ok) {
+                            showModal('success', '✔️ Zmiany w magazynie zostały zapisane.');
+                        } else {
+                            const errorText = await response.text();
+                            showModal('danger', `❌ Nie udało się zapisać zmian. Szczegóły: ${errorText}`);
+                        }
+                    } catch (error) {
+                        showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                    }
+                });
+
+                function showModal(type, message) {
+                    alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                    alertModalMessage.innerHTML = message;
+                    alertModal.show();
+                }
+            });
+        </script>
+
+
+}

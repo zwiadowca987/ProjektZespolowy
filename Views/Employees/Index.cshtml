@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Employee>
+
+@{
+    ViewData["Title"] = "Lista Pracowników";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">Lista Pracowników</h1>
+        <a asp-action="Create" class="btn btn-success">Dodaj Nowego Pracownika</a>
+    </div>
+
+    <div class="mb-3">
+        <input type="text" id="searchBox" class="form-control" placeholder="Wyszukaj pracownika..." />
+    </div>
+
+    <table class="table table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.PracownikID)</th>
+                <th>@Html.DisplayNameFor(model => model.Imie)</th>
+                <th>@Html.DisplayNameFor(model => model.Nazwisko)</th>
+                <th>@Html.DisplayNameFor(model => model.Stanowisko)</th>
+                <th>@Html.DisplayNameFor(model => model.AdresEmail)</th>
+                <th>@Html.DisplayNameFor(model => model.AdresZamieszkania)</th>
+                <th>@Html.DisplayNameFor(model => model.Login)</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody id="warehouseTableBody">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.PracownikID)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.Imie)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.Nazwisko)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.Stanowisko)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.AdresEmail)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.AdresZamieszkania)</td>
+                    <td class="filterable">@Html.DisplayFor(modelItem => item.Login)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.PracownikID" class="btn btn-sm btn-warning">Edytuj</a>
+                            <a asp-action="Delete" asp-route-id="@item.PracownikID" class="btn btn-sm btn-danger">Usuń</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchBox').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#warehouseTableBody tr');
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('.filterable');
+                const rowText = Array.from(columns).map(col => col.textContent.toLowerCase()).join(' ');
+                if (rowText.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

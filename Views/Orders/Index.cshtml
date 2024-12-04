@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Order>
+
+@{
+    ViewData["Title"] = "Lista zamówień";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="text-primary">@ViewData["Title"]</h1>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-lg"></i> Dodaj nowe zamówienie</a>
+    </div>
+    <div class="mb-3">
+        <input type="text" id="searchInput" class="form-control w-100" placeholder="Wyszukaj zamówienia..." aria-label="Wyszukaj zamówienia" />
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle" id="ordersTable">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th><a href="#" class="sort-link text-light" data-column="OrderId">Zamówienie</a></th>
+                    <th><a href="#" class="sort-link text-light" data-column="CustomerId">Klient</a></th>
+                    <th><a href="#" class="sort-link text-light" data-column="Date">Data</a></th>
+                    <th><a href="#" class="sort-link text-light" data-column="Price">Cena</a></th>
+                    <th><a href="#" class="sort-link text-light" data-column="Status">Status</a></th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr class="text-center">
+                        <td>@order.OrderId</td>
+                        <td>@order.CustomerId</td>
+                        <td>@order.Date.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@order.Price.ToString("C")</td>
+                        <td>@order.Status</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Szczegóły
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@order.OrderId" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i> Status 
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@order.OrderId" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Usuń
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#ordersTable tbody tr');
+
+            rows.forEach(row => {
+                const rowText = Array.from(row.children).map(cell => cell.textContent.toLowerCase()).join(' ');
+                row.style.display = rowText.includes(query) ? '' : 'none';
+            });
+        });
+
+        document.querySelectorAll('.sort-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const column = this.getAttribute('data-column');
+                sortTable(column);
+            });
+        });
+
+        function sortTable(column) {
+            const table = document.getElementById("ordersTable");
+            const rows = Array.from(table.querySelectorAll("tbody tr"));
+            const index = [...table.querySelectorAll("thead th")].findIndex(th => th.querySelector(`.sort-link[data-column="${column}"]`));
+
+            const sortedRows = rows.sort((a, b) => {
+                const aText = a.children[index].innerText;
+                const bText = b.children[index].innerText;
+
+                if (!isNaN(Date.parse(aText)) && !isNaN(Date.parse(bText))) {
+                    return new Date(aText) - new Date(bText);
+                } else if (!isNaN(aText) && !isNaN(bText)) {
+                    return parseFloat(aText) - parseFloat(bText);
+                } else {
+                    return aText.localeCompare(bText, 'pl', { numeric: true });
+                }
+            });
+
+            const tbody = table.querySelector("tbody");
+            tbody.innerHTML = "";
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+}

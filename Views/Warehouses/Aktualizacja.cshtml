@@ -1,0 +1,137 @@
+﻿@model List<ProjektZespolowy.Models.Warehouse>
+
+@{
+    ViewData["Title"] = "Aktualizacja magazynu";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+
+ 
+    <div class="input-group mb-4">
+        <span class="input-group-text bg-white border-end-0">
+            <i class="bi bi-search text-secondary"></i>
+        </span>
+        <input type="text" id="search-box" class="form-control border-start-0" placeholder="Wyszukaj produkt..." onkeyup="filterTable()" />
+    </div>
+
+
+
+    <div class="card shadow-sm border-primary">
+        <div class="card-body">
+            <form id="warehouseForm" asp-action="ZapiszAktualizacje" method="post">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="warehouse-table">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.First().ProduktId)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Product.NazwaProduktu)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().DostepnaIlosc)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Pojemnosc)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(model => Model[i].ProduktId)
+                                        <input type="hidden" name="[@i].ProduktId" value="@Model[i].ProduktId" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => Model[i].Product.NazwaProduktu)
+                                    </td>
+                                    <td>
+                                        <input type="number" name="[@i].DostepnaIlosc" class="form-control" value="@Model[i].DostepnaIlosc" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="[@i].Pojemnosc" class="form-control" value="@Model[i].Pojemnosc" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+              
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterTable() {
+            const input = document.getElementById("search-box").value.toLowerCase();
+            const rows = document.querySelectorAll("#warehouse-table tbody tr");
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('warehouseForm');
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            const alertModalMessage = document.getElementById('alertModalMessage');
+            const alertModalLabel = document.getElementById('alertModalLabel');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (response.ok) {
+
+                        showModal('success', '✔️ Zmiany w magazynie zostały zapisane.');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "Warehouses")'; 
+                        }, 2000);
+                    } else {
+                        const errorText = await response.text();
+                        showModal('danger', `❌ Nie udało się zapisać zmian. Szczegóły: ${errorText}`);
+                    }
+                } catch (error) {
+
+                    showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                }
+            });
+
+            function showModal(type, message) {
+                alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                alertModalMessage.innerHTML = message;
+                alertModal.show();
+            }
+        });
+    </script>
+}

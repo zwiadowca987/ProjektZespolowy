@@ -1,0 +1,112 @@
+﻿@model ProjektZespolowy.Models.Product
+
+@{
+    ViewData["Title"] = "Edytuj Produkt";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">@ViewData["Title"]</h1>
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Edytuj szczegóły produktu</h4>
+        </div>
+        <div class="card-body">
+            <form id="editForm" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+                <input type="hidden" asp-for="ProduktId" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="NazwaProduktu" class="form-label fw-bold">Nazwa Produktu</label>
+                    <input asp-for="NazwaProduktu" class="form-control" />
+                    <span asp-validation-for="NazwaProduktu" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Opis" class="form-label fw-bold">Opis</label>
+                    <textarea asp-for="Opis" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Opis" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Producent" class="form-label fw-bold">Producent</label>
+                    <input asp-for="Producent" class="form-control" />
+                    <span asp-validation-for="Producent" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Cena" class="form-label fw-bold">Cena (zł)</label>
+                    <input asp-for="Cena" class="form-control" type="number" step="0.01" lang="pl" />
+                    <span asp-validation-for="Cena" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+                    <button type="submit" class="btn btn-success">Zapisz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage">
+                <!-- Treść dynamicznie ustawiana -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('editForm');
+        const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        const alertModalMessage = document.getElementById('alertModalMessage');
+        const alertModalLabel = document.getElementById('alertModalLabel');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
+
+                if (response.ok) {
+                    showModal('success', '✔️ Zmiany zostały zapisane!');
+                    setTimeout(() => {
+                        window.location.href = '@Url.Action("Index", "Products")'; // Przekierowanie po sukcesie
+                    }, 2000);
+                } else {
+                    const errorText = await response.text();
+                    showModal('danger', `❌ Nie udało się zapisać zmian. Szczegóły: ${errorText}`);
+                }
+            } catch (error) {
+                showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+            }
+        });
+
+        function showModal(type, message) {
+            alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+            alertModalMessage.innerHTML = message;
+            alertModal.show();
+        }
+    });
+</script>

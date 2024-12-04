@@ -1,0 +1,103 @@
+﻿@model ProjektZespolowy.Models.Order
+
+@{
+    ViewData["Title"] = "Usuń Zamówienie";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-danger mb-4">@ViewData["Title"]</h1>
+    <h3 class="text-center">Czy na pewno chcesz usunąć to zamówienie?</h3>
+
+    <div class="card shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Szczegóły zamówienia</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">Klient</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CustomerId)</dd>
+
+                <dt class="col-sm-4 fw-bold">Data Zamówienia</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Date)</dd>
+
+                <dt class="col-sm-4 fw-bold">Łączna Cena</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Price) zł</dd>
+
+                <dt class="col-sm-4 fw-bold">Status</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Status)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <form id="deleteForm" asp-action="Delete" class="d-inline">
+            <input type="hidden" asp-for="OrderId" />
+            <button type="submit" class="btn btn-danger">Usuń</button>
+        </form>
+        <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+    </div>
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('deleteForm'); 
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            const alertModalMessage = document.getElementById('alertModalMessage');
+            const alertModalLabel = document.getElementById('alertModalLabel');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (response.ok) {
+                        showModal('success', '✔️ Rekord został pomyślnie usunięty.');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "Orders")';
+                        }, 2000);
+                    } else {
+                        const errorText = await response.text();
+                        showModal('danger', `❌ Nie udało się usunąć rekordu. Szczegóły: ${errorText}`);
+                    }
+                } catch (error) {
+                    showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                }
+            });
+
+            function showModal(type, message) {
+                alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                alertModalMessage.innerHTML = message;
+                alertModal.show();
+            }
+        });
+    </script>
+}

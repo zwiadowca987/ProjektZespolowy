@@ -1,0 +1,37 @@
+﻿@model ProjektZespolowy.Models.OrderWarehouse
+
+@{
+    ViewData["Title"] = "Szczegóły Zamówienia";
+}
+
+<div class="container p-4 mt-5" style="border: 2px solid #28a745; border-radius: 8px;">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <dl class="row">
+        <dt class="col-sm-4">Data Zamówienia</dt>
+        <dd class="col-sm-8">@Model.Data.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <dt class="col-sm-4">Produkt</dt>
+        <dd class="col-sm-8">@Model.NazwaProduktu</dd>
+
+        <dt class="col-sm-4">Dostawca</dt>
+        <dd class="col-sm-8">@Model.Supplier?.NazwaDostawcy</dd>
+
+        <dt class="col-sm-4">Ilość Do Zamówienia</dt>
+        <dd class="col-sm-8">@Model.DoZamowienia</dd>
+
+        <dt class="col-sm-4">Łączna wartość zamówienia</dt>
+        <dd class="col-sm-8">@Model.WartoscZamowienia</dd>
+
+        <dt class="col-sm-4">Uwagi</dt>
+        <dd class="col-sm-8">@Model.Uwagi</dd>
+
+        <dt class="col-sm-4">Status Dostawy</dt>
+        <dd class="col-sm-8">@Model.StatusDostawy</dd>
+    </dl>
+
+    <div class="text-center">
+        <a asp-action="Edit" asp-route-id="@Model.ZamMag" class="btn btn-primary">Edytuj</a>
+        <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+    </div>
+</div>

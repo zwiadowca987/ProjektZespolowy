@@ -1,60 +1,187 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ProjektZespolowy</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProjektZespolowy.styles.css" asp-append-version="true" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="~/css/panelgorny.css" asp-append-version="true" />
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjektZespolowy</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Elektro-expert</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <!-- Home -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill"></i> Home
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        <!-- Obsługa Sprzedaży -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" role="button" aria-expanded="false" id="finances">Finanse</a>
-
-                            <div class="dropdown-menu" aria-labelledby="finances">
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Costs" asp-action="Index">Koszta</a>
-                            </div>
+                            <a class="nav-link dropdown-toggle" href="#" id="customers" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-people-fill"></i> Obsługa Sprzedaży
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="customers">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
+                                        <i class="bi bi-card-list"></i> Stan Magazynowy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
+                                        <i class="bi bi-plus-circle"></i> Rejestr Produktów
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="Index">
+                                        <i class="bi bi-person-plus-fill"></i> Bieżące zamówienia
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Customers" asp-action="Index">
+                                        <i class="bi bi-pencil-square"></i> Rejestr Klientów
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
 
+                        <!-- Obsługa Zamówień -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="orders" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-basket-fill"></i> Obsługa Zamówień
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="orders">
+                                
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
+                                        <i class="bi bi-card-list"></i> Rejestr raportów
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
+                                        <i class="bi bi-card-list"></i> Stan Magazynowy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Suppliers" asp-action="Index">
+                                        <i class="bi bi-card-list"></i> Dostawcy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
+                                        <i class="bi bi-basket2-fill"></i> Zamówienia Dla Magazynu
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Magazyn -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="warehouse" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-box-seam"></i> Zarządzanie Magazynem
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="warehouse">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Index">
+                                        <i class="bi bi-card-checklist"></i> Stan magazynowy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
+                                        <i class="bi bi-plus-circle"></i> Rejestr Produktów
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
+                                        <i class="bi bi-plus-circle"></i> Raporty
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
+                                        <i class="bi bi-plus-circle"></i> Dostawy do magazynu
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Finanse -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="finances" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-currency-dollar"></i> Finanse
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="finances">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Index">
+                                        <i class="bi bi-wallet2"></i> Spis Wydatków
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
+                                        <i class="bi bi-plus-circle"></i> Rejestr Płatności
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
+                                        <i class="bi bi-plus-circle"></i> Raporty Finansowe
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Pracownicy -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="employees" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-badge-fill"></i> Pracownicy
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="employees">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">
+                                        <i class="bi bi-people-fill"></i> Lista pracowników
+                                    </a>
+                                </li>
+                               
+                            </ul>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer">
         <div class="container">
-            &copy; 2024 - ProjektZespolowy - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Projekt Zespołowy  - Mateusz Szczerek 144531 | Jakub Traczyk 144617 | Dominik Wójcik 144742 | Jakub Zaczek 144780 - [Zespół nr 1]
+            
         </div>
     </footer>
-    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>    
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

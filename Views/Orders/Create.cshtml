@@ -1,0 +1,134 @@
+﻿@model ProjektZespolowy.Models.Order
+
+@{
+    ViewData["Title"] = "Utwórz Zamówienie";
+    var customers = ViewData["Customers"] as List<SelectListItem>;
+    var products = ViewData["Products"] as List<SelectListItem>;
+}
+
+<div class="container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <form id="createOrderForm" asp-action="Create" asp-controller="Orders" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <h4>Dane Zamówienia</h4>
+        <div class="mb-3">
+            <label for="CustomerId" class="form-label">Klient</label>
+            <select asp-for="CustomerId" class="form-select" required>
+                <option value="">Wybierz Klienta</option>
+                @foreach (var customer in customers)
+                {
+                    <option value="@customer.Value">@customer.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="Date" class="form-label">Data Zamówienia</label>
+            <input type="text" class="form-control" id="Date" name="Date" value="@Model.Date.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+        </div>
+        <div class="mb-3">
+            <input type="number" class="form-control" id="Price" name="Price" step="0.01" value="@Model.Price" hidden />
+        </div>
+        <div class="mb-3">
+            <label for="Status" class="form-label">Status</label>
+            <select class="form-select" id="Status" name="Status" required>
+                <option value="Nowe">Nowe</option>
+                <option value="Anulowane">Anulowane</option>
+                <option value="Odrzucone">Odrzucone</option>
+                <option value="Ukończone">Ukończone</option>
+                <option value="W realizacji">W realizacji</option>
+                <option value="Nierozpoczęte">Nierozpoczęte</option>
+            </select>
+        </div>
+
+        <h4>Szczegóły Zamówienia</h4>
+        <table class="table" id="orderDetailsTable">
+            <thead>
+                <tr>
+                    <th>ID Produktu</th>
+                    <th>Nazwa Produktu</th>
+                    <th>Ilość</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class="form-control" name="OrderDetails[0].ProductId" onchange="updateProductName(this)" required>
+                            <option value="">Wybierz Produkt</option>
+                            @foreach (var product in products)
+                            {
+                                <option value="@product.Value">@product.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="OrderDetails[0].NazwaProduktu" readonly />
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" name="OrderDetails[0].Quantity" required />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Usuń</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" id="addRowButton">Dodaj Produkt</button>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">Zapisz Zamówienie</button>
+            <a asp-action="Index" asp-controller="Orders" class="btn btn-secondary">Powrót</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function updateProductName(selectElement) {
+            const productId = selectElement.value;
+            const productNameField = selectElement.closest('tr').querySelector('input[name$=".NazwaProduktu"]');
+
+            if (productId && productNameField) {
+                const productText = selectElement.options[selectElement.selectedIndex].text;
+                productNameField.value = productText.split(" - ")[1]; 
+            } else {
+                productNameField.value = "";
+            }
+        }
+
+        document.getElementById("addRowButton").addEventListener("click", function () {
+            const tableBody = document.querySelector("#orderDetailsTable tbody");
+            const rowCount = tableBody.rows.length;
+            const newRow = document.createElement("tr");
+
+            newRow.innerHTML = `
+                        <td>
+                            <select class="form-control" name="OrderDetails[${rowCount}].ProductId" onchange="updateProductName(this)" required>
+                                <option value="">Wybierz Produkt</option>
+        @foreach (var product in products)
+        {
+                                        <option value="@product.Value">@product.Text</option>
+        }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="OrderDetails[${rowCount}].NazwaProduktu" readonly />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" name="OrderDetails[${rowCount}].Quantity" required />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Usuń</button>
+                        </td>`;
+            tableBody.appendChild(newRow);
+        });
+
+        function removeRow(button) {
+            const row = button.closest("tr");
+            row.remove();
+        }
+    </script>
+}

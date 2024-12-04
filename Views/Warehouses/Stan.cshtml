@@ -1,0 +1,67 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.Warehouse>
+
+@{
+    ViewData["Title"] = "Aktualny stan magazynowy";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="container-fluid p-4" style="max-width: 1200px;">
+        <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+        <div class="mb-4 d-flex justify-content-center">
+            <input type="text" id="searchBox" class="form-control shadow-sm" style="width: 100%; max-width: 900px;" placeholder="Wyszukaj produkt..." />
+        </div>
+
+        <div class="table-responsive" style="border-radius: 10px; overflow: hidden;">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Produkt ID</th>
+                        <th>Nazwa Produktu</th>
+                        <th>Cena</th>
+                        <th>Dostępna Ilość</th>
+                        <th>Pojemność</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="warehouseTableBody">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td class="filterable">@item.ProduktId</td>
+                            <td class="filterable">@item.Product.NazwaProduktu</td>
+                            <td class="filterable">@item.Product.Cena.ToString("C")</td>
+                            <td class="filterable">@item.DostepnaIlosc</td>
+                            <td class="filterable">@item.Pojemnosc</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Warehouses" asp-action="Edit" asp-route-id="@item.ProduktId" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i> Edytuj</a>
+                                    <a asp-controller="Warehouses" asp-action="Details" asp-route-id="@item.ProduktId" class="btn btn-sm btn-info"><i class="bi bi-eye"></i> Szczegóły</a>
+                                    <a asp-controller="Warehouses" asp-action="Delete" asp-route-id="@item.ProduktId" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Usuń</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchBox').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#warehouseTableBody tr');
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('.filterable');
+                const rowText = Array.from(columns).map(col => col.textContent.toLowerCase()).join(' ');
+                if (rowText.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

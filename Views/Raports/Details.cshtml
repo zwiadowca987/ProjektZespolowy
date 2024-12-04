@@ -1,0 +1,51 @@
+﻿@model ProjektZespolowy.Models.Raport
+
+@{
+    ViewData["Title"] = "Szczegóły Raportu";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3>Podstawowe Informacje</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">ID Raportu</dt>
+                <dd class="col-sm-8">@Model.RaportId</dd>
+
+                <dt class="col-sm-4">Typ</dt>
+                <dd class="col-sm-8">@Model.Typ</dd>
+
+                <dt class="col-sm-4">Data Wygenerowania</dt>
+                <dd class="col-sm-8">@Model.DataWygenerowania</dd>
+
+                <dt class="col-sm-4">Uwagi</dt>
+                <dd class="col-sm-8">@Model.Uwagi</dd>
+            </dl>
+        </div>
+    </div>
+
+    <h3>Pozycje w Raporcie</h3>
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>ID Produktu</th>
+                <th>Nazwa Produktu</th>
+                <th>Ilość</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RaportItems)
+            {
+                <tr>
+                    <td>@item.ProduktId</td>
+                    <td>@item.NazwaProduktu</td>
+                    <td>@item.Ilosc</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Index" class="btn btn-secondary">Powrót do Listy</a>
+</div>

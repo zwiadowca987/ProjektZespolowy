@@ -1,0 +1,134 @@
+﻿@model ProjektZespolowy.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <h1 class="text-primary">Dodaj Pracownika</h1>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 p-4" style="border: 2px solid #4CAF50; border-radius: 8px;">
+            <form id="addForm" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group">
+                    <label asp-for="Imie" class="form-label"></label>
+                    <input asp-for="Imie" class="form-control" />
+                    <span asp-validation-for="Imie" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Nazwisko" class="form-label"></label>
+                    <input asp-for="Nazwisko" class="form-control" />
+                    <span asp-validation-for="Nazwisko" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Stanowisko" class="form-label"></label>
+                    <select asp-for="Stanowisko" class="form-control">
+                        <option value="">-- Wybierz stanowisko --</option>
+                        <option value="Magazynier">Magazynier</option>
+                        <option value="Sprzedawca">Sprzedawca</option>
+                        <option value="Finansista">Finansista</option>
+                        <option value="Pracownik">Pracownik</option>
+                        <option value="Admin">Administrator</option>
+                    </select>
+                    <span asp-validation-for="Stanowisko" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AdresEmail" class="form-label"></label>
+                    <input asp-for="AdresEmail" class="form-control" type="email" />
+                    <span asp-validation-for="AdresEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AdresZamieszkania" class="form-label"></label>
+                    <input asp-for="AdresZamieszkania" class="form-control" />
+                    <span asp-validation-for="AdresZamieszkania" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Login" class="form-label"></label>
+                    <input asp-for="Login" class="form-control" />
+                    <span asp-validation-for="Login" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Haslo" class="form-label"></label>
+                    <input asp-for="Haslo" type="password" class="form-control" />
+                    <span asp-validation-for="Haslo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <input type="submit" value="Dodaj" class="btn btn-success w-100" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Powrót do Listy</a>
+    </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('addForm');
+                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                    const alertModalMessage = document.getElementById('alertModalMessage');
+                    const alertModalLabel = document.getElementById('alertModalLabel');
+
+                    form.addEventListener('submit', async function (event) {
+                        event.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        try {
+                            const response = await fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                                }
+                            });
+
+                            if (response.ok) {
+                                showModal('success', '✔️ Pracownik dodany do bazy.');
+                                setTimeout(() => window.location.href = '@Url.Action("Index", "Employees")', 2000);
+                            } else {
+                                const errorText = await response.text();
+                                showModal('danger', `❌ Nie udało się utworzyć zamówienia. Szczegóły: ${errorText}`);
+                            }
+                        } catch (error) {
+                            showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                        }
+                    });
+
+                    function showModal(type, message) {
+                        alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                        alertModalMessage.innerHTML = message;
+                        alertModal.show();
+                    }
+                });
+    </script>
+}
+

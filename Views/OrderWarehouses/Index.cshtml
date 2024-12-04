@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ProjektZespolowy.Models.OrderWarehouse>
+
+@{
+    ViewData["Title"] = "Zamówienia do dostawcy";
+}
+
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h1 class="h2">@ViewData["Title"]</h1>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <a asp-controller="OrderWarehouses" asp-action="Create" class="btn btn-success btn-md">
+                <i class="bi bi-plus-circle"></i> Utwórz zlecenie
+            </a>
+        </div>
+        <div class="w-50">
+            <input type="text" id="searchBox" class="form-control form-control-md" placeholder="Wyszukaj zamówienie..." />
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.ZamMag)</th>
+                    <th>@Html.DisplayNameFor(model => model.Data)</th>
+                    <th>@Html.DisplayNameFor(model => model.NazwaProduktu)</th>
+                    <th>@Html.DisplayNameFor(model => model.StatusDostawy)</th>
+                    <th>@Html.DisplayNameFor(model => model.Supplier.NazwaDostawcy)</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody id="orderWarehouseTableBody" class="align-middle">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="filterable">@item.ZamMag</td>
+                        <td class="filterable">@item.Data.ToString("dd.MM.yyyy")</td>
+                        <td class="filterable">@Html.DisplayFor(modelItem => item.NazwaProduktu)</td>
+                        <td class="filterable">@Html.DisplayFor(modelItem => item.StatusDostawy)</td>
+                        <td class="filterable">@item.Supplier?.NazwaDostawcy</td>
+                        <td class="text-nowrap">
+                            <a asp-action="Edit" asp-route-id="@item.ZamMag" class="btn btn-primary btn-sm me-1">
+                                <i class="bi bi-pencil"></i> Edytuj
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.ZamMag" class="btn btn-info btn-sm me-1">
+                                <i class="bi bi-eye"></i> Szczegóły
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.ZamMag" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Usuń
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchBox').addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#orderWarehouseTableBody tr');
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('.filterable');
+                const rowText = Array.from(columns).map(col => col.textContent.toLowerCase()).join(' ');
+                row.style.display = rowText.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+}

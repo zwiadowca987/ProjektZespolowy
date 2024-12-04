@@ -1,0 +1,155 @@
+﻿@model ProjektZespolowy.Models.OrderWarehouse
+
+@{
+    ViewData["Title"] = "Edytuj Zamówienie";
+}
+
+<div class="container p-4 mt-5" style="border: 2px solid #007BFF; border-radius: 8px;">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <form id="editOrderForm" asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input asp-for="ZamMag" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="Data" class="control-label">Data Zamówienia</label>
+            <input asp-for="Data" class="form-control" type="datetime-local" />
+            <span asp-validation-for="Data" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProduktId" class="control-label">Produkt</label>
+            <select asp-for="ProduktId" class="form-control" asp-items="ViewBag.ProduktId" onchange="fetchProductName(this)"></select>
+            <span asp-validation-for="ProduktId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NazwaProduktu" class="control-label">Nazwa Produktu</label>
+            <input asp-for="NazwaProduktu" class="form-control nazwa-produktu" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DostawcaID" class="control-label">Dostawca</label>
+            <select asp-for="DostawcaID" class="form-control" asp-items="ViewBag.DostawcaID"></select>
+            <span asp-validation-for="DostawcaID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DoZamowienia" class="control-label">Ilość Do Zamówienia</label>
+            <input asp-for="DoZamowienia" class="form-control" />
+            <span asp-validation-for="DoZamowienia" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Uwagi" class="control-label">Uwagi</label>
+            <textarea asp-for="Uwagi" class="form-control"></textarea>
+            <span asp-validation-for="Uwagi" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WartoscZamowienia" class="control-label"></label>
+            <input asp-for="WartoscZamowienia" class="form-control" type="text" />
+            <span asp-validation-for="WartoscZamowienia" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StatusDostawy" class="control-label">Status Dostawy</label>
+            <select asp-for="StatusDostawy" class="form-control">
+                <option value="nowe">Nowe</option>
+                <option value="zlecone">Zlecone</option>
+                <option value="planowane">Planowane</option>
+                <option value="ukonczone">Ukończone</option>
+                <option value="anulowane">Anulowane</option>
+                <option value="nieznane">Nieznane</option>
+            </select>
+            <span asp-validation-for="StatusDostawy" class="text-danger"></span>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+        </div>
+    </form>
+</div>
+
+<!-- Modal dla komunikatu -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function fetchProductName(selectElement) {
+            const productId = selectElement.value;
+            const nameField = document.querySelector(".nazwa-produktu");
+
+            if (!productId) {
+                nameField.value = "";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/OrderWarehouses/GetProductName?id=${productId}`);
+                if (response.ok) {
+                    const productName = await response.text();
+                    nameField.value = productName || "Nie znaleziono";
+                } else {
+                    nameField.value = "Nie znaleziono produktu";
+                }
+            } catch (error) {
+                nameField.value = "Błąd";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('editOrderForm');
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            const alertModalMessage = document.getElementById('alertModalMessage');
+            const alertModalLabel = document.getElementById('alertModalLabel');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (response.ok) {
+                        showModal('success', '✔️ Zamówienie zostało zaktualizowane.');
+                        setTimeout(() => window.location.href = '@Url.Action("Index", "OrderWarehouses")', 2000);
+                    } else {
+                        const errorText = await response.text();
+                        showModal('danger', `❌ Nie udało się zapisać zamówienia. Szczegóły: ${errorText}`);
+                    }
+                } catch (error) {
+                    showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                }
+            });
+
+            function showModal(type, message) {
+                alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                alertModalMessage.innerHTML = message;
+                alertModal.show();
+            }
+        });
+    </script>
+}

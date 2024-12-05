@@ -22,6 +22,24 @@ namespace ProjektZespolowy.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("OrderDetails", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("ProjektZespolowy.Models.Costs", b =>
                 {
                     b.Property<int>("Id")
@@ -141,27 +159,6 @@ namespace ProjektZespolowy.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("ProjektZespolowy.Models.OrderDetails", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("ProjektZespolowy.Models.OrderWarehouse", b =>
@@ -325,18 +322,7 @@ namespace ProjektZespolowy.Migrations
                     b.ToTable("RaportItems");
                 });
 
-            modelBuilder.Entity("ProjektZespolowy.Models.Order", b =>
-                {
-                    b.HasOne("ProjektZespolowy.Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ProjektZespolowy.Models.OrderDetails", b =>
+            modelBuilder.Entity("OrderDetails", b =>
                 {
                     b.HasOne("ProjektZespolowy.Models.Order", "Order")
                         .WithMany("OrderDetails")
@@ -353,6 +339,17 @@ namespace ProjektZespolowy.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ProjektZespolowy.Models.Order", b =>
+                {
+                    b.HasOne("ProjektZespolowy.Models.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("ProjektZespolowy.Models.OrderWarehouse", b =>

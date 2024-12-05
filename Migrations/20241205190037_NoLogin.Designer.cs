@@ -12,7 +12,7 @@ using ProjektZespolowy.Data;
 namespace ProjektZespolowy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241205095547_NoLogin")]
+    [Migration("20241205190037_NoLogin")]
     partial class NoLogin
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace ProjektZespolowy.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -214,10 +214,7 @@ namespace ProjektZespolowy.Migrations
             modelBuilder.Entity("ProjektZespolowy.Models.Product", b =>
                 {
                     b.Property<int>("ProduktId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProduktId"));
 
                     b.Property<decimal>("Cena")
                         .HasColumnType("decimal(18,2)");

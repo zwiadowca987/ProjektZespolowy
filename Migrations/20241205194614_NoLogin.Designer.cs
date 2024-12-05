@@ -12,7 +12,7 @@ using ProjektZespolowy.Data;
 namespace ProjektZespolowy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241205190037_NoLogin")]
+    [Migration("20241205194614_NoLogin")]
     partial class NoLogin
     {
         /// <inheritdoc />

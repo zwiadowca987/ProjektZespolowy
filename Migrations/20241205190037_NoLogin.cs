@@ -65,8 +65,7 @@ namespace ProjektZespolowy.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProduktId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProduktId = table.Column<int>(type: "int", nullable: false),
                     NazwaProduktu = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Opis = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Producent = table.Column<string>(type: "nvarchar(max)", nullable: true),

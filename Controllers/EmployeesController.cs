@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -164,6 +165,33 @@ namespace ProjektZespolowy.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-    
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(Employee employee)
+        {
+            var userFromDb = await _context.Employees.FirstOrDefaultAsync(u => u.Login == employee.Login);
+
+            if (userFromDb != null && employee.Haslo == userFromDb.Haslo)
+            {
+                // Authentication successful
+                HttpContext.Session.SetString("Username", userFromDb.Login);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid username or password");
+                return View();
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

@@ -16,6 +16,43 @@ namespace ProjektZespolowy
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Login.Session";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                {
+                    policy.RequireRole("Admin");
+                });
+
+                options.AddPolicy("SprzedawcaPolicy", policy =>
+                {
+                    policy.RequireRole("Sprzedawca");
+                });
+
+                options.AddPolicy("MagazynierPolicy", policy =>
+                {
+                    policy.RequireRole("Magazynier");
+                });
+
+                options.AddPolicy("PracownikPolicy", policy =>
+                {
+                    policy.RequireRole("Pracownik");
+                });
+
+                options.AddPolicy("FinansistaPolicy", policy =>
+                {
+                    policy.RequireRole("Finansista");
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,6 +69,8 @@ namespace ProjektZespolowy
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",

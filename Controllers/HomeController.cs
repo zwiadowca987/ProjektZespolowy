@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using ProjektZespolowy.Models;
 using System.Diagnostics;
 
@@ -15,6 +16,8 @@ namespace ProjektZespolowy.Controllers
 
         public IActionResult Index()
         {
+            var username = HttpContext.Session.GetString("Username");
+            ViewBag.Username = username;
             return View();
         }
 

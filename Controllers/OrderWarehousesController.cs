@@ -21,6 +21,9 @@ namespace ProjektZespolowy.Controllers
         // GET: OrderWarehouses
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var orders = _context.OrderWarehouses
                 .Include(o => o.Warehouse)
                 .Include(o => o.Supplier);
@@ -30,6 +33,9 @@ namespace ProjektZespolowy.Controllers
         // GET: OrderWarehouses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -48,11 +54,12 @@ namespace ProjektZespolowy.Controllers
             return View(orderWarehouse);
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> GetProductName(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             try
             {
                 var product = await _context.Warehouses
@@ -71,12 +78,11 @@ namespace ProjektZespolowy.Controllers
             }
         }
 
-
-
-
-
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             PopulateViewBags();
 
             var produkty = _context.Warehouses.ToList();
@@ -88,11 +94,13 @@ namespace ProjektZespolowy.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ZamMag,Data,ProduktId,NazwaProduktu,DostawcaID,DoZamowienia,StatusDostawy,Uwagi,WartoscZamowienia")] OrderWarehouse orderWarehouse)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             Console.WriteLine("ProduktId: " + orderWarehouse.ProduktId);
             Console.WriteLine("NazwaProduktu: " + orderWarehouse.NazwaProduktu);
             Console.WriteLine("DostawcaID: " + orderWarehouse.DostawcaID);
@@ -122,7 +130,6 @@ namespace ProjektZespolowy.Controllers
             return View(orderWarehouse);
         }
 
-
         private void PopulateViewBags()
         {
             ViewBag.ProduktId = new SelectList(
@@ -138,10 +145,12 @@ namespace ProjektZespolowy.Controllers
             );
         }
 
-
         // GET: OrderWarehouses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -162,6 +171,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ZamMag,Data,ProduktId,NazwaProduktu,DoZamowienia,StatusDostawy,DostawcaID,Uwagi,WartoscZamowienia")] OrderWarehouse orderWarehouse)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != orderWarehouse.ZamMag)
             {
                 return NotFound();
@@ -204,6 +216,9 @@ namespace ProjektZespolowy.Controllers
         // GET: OrderWarehouses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -227,6 +242,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var orderWarehouse = await _context.OrderWarehouses.FindAsync(id);
             if (orderWarehouse != null)
             {
@@ -241,7 +259,5 @@ namespace ProjektZespolowy.Controllers
         {
             return (_context.OrderWarehouses?.Any(e => e.ZamMag == id)).GetValueOrDefault();
         }
-
-    
     }
 }

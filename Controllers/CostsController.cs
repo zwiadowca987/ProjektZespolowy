@@ -23,12 +23,18 @@ namespace ProjektZespolowy.Controllers
         // GET: Costs
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View(await _context.Costs.ToListAsync());
         }
 
         // GET: Costs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -47,6 +53,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Costs/Create
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
@@ -57,6 +66,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Cost,Period")] Costs costs)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (ModelState.IsValid)
             {
                 _context.Add(costs);
@@ -69,6 +81,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Costs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -89,6 +104,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Cost,Period")] Costs costs)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != costs.Id)
             {
                 return NotFound();
@@ -120,6 +138,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Costs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -140,6 +161,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var costs = await _context.Costs.FindAsync(id);
             if (costs != null)
             {

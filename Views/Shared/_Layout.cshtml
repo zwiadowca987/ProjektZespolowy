@@ -31,135 +31,150 @@
                         </li>
 
                         <!-- Obsługa Sprzedaży -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="customers" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-people-fill"></i> Obsługa Sprzedaży
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="customers">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
-                                        <i class="bi bi-card-list"></i> Stan Magazynowy
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
-                                        <i class="bi bi-plus-circle"></i> Rejestr Produktów
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="Index">
-                                        <i class="bi bi-person-plus-fill"></i> Bieżące zamówienia
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Customers" asp-action="Index">
-                                        <i class="bi bi-pencil-square"></i> Rejestr Klientów
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (ViewBag.Role == "Sprzedawca" || ViewBag.Role == "Admin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="customers" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-people-fill"></i> Obsługa Sprzedaży
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="customers">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
+                                            <i class="bi bi-card-list"></i> Stan Magazynowy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
+                                            <i class="bi bi-plus-circle"></i> Rejestr Produktów
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="Index">
+                                            <i class="bi bi-person-plus-fill"></i> Bieżące zamówienia
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Customers" asp-action="Index">
+                                            <i class="bi bi-pencil-square"></i> Rejestr Klientów
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
 
-                        <!-- Obsługa Zamówień -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="orders" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-basket-fill"></i> Obsługa Zamówień
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="orders">
-                                
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
-                                        <i class="bi bi-card-list"></i> Rejestr raportów
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
-                                        <i class="bi bi-card-list"></i> Stan Magazynowy
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Suppliers" asp-action="Index">
-                                        <i class="bi bi-card-list"></i> Dostawcy
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
-                                        <i class="bi bi-basket2-fill"></i> Zamówienia Dla Magazynu
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (ViewBag.Role == "Pracownik" || ViewBag.Role == "Admin")
+                        {
+                            <!-- Obsługa Zamówień -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="orders" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-basket-fill"></i> Obsługa Zamówień
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="orders">
 
-                        <!-- Magazyn -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="warehouse" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-box-seam"></i> Zarządzanie Magazynem
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="warehouse">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Index">
-                                        <i class="bi bi-card-checklist"></i> Stan magazynowy
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
-                                        <i class="bi bi-plus-circle"></i> Rejestr Produktów
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
-                                        <i class="bi bi-plus-circle"></i> Raporty
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
-                                        <i class="bi bi-plus-circle"></i> Dostawy do magazynu
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
+                                            <i class="bi bi-card-list"></i> Rejestr raportów
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Stan">
+                                            <i class="bi bi-card-list"></i> Stan Magazynowy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Suppliers" asp-action="Index">
+                                            <i class="bi bi-card-list"></i> Dostawcy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
+                                            <i class="bi bi-basket2-fill"></i> Zamówienia Dla Magazynu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        
+                        @if (ViewBag.Role == "Magazynier" || ViewBag.Role == "Admin")
+                        {
+                            <!-- Magazyn -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="warehouse" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-box-seam"></i> Zarządzanie Magazynem
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="warehouse">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Warehouses" asp-action="Index">
+                                            <i class="bi bi-card-checklist"></i> Stan magazynowy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">
+                                            <i class="bi bi-plus-circle"></i> Rejestr Produktów
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Raports" asp-action="Index">
+                                            <i class="bi bi-plus-circle"></i> Raporty
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="OrderWarehouses" asp-action="Index">
+                                            <i class="bi bi-plus-circle"></i> Dostawy do magazynu
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
 
-                        <!-- Finanse -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="finances" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-currency-dollar"></i> Finanse
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="finances">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Index">
-                                        <i class="bi bi-wallet2"></i> Spis Wydatków
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
-                                        <i class="bi bi-plus-circle"></i> Rejestr Płatności
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
-                                        <i class="bi bi-plus-circle"></i> Raporty Finansowe
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (ViewBag.Role == "Finansista" || ViewBag.Role == "Admin")
+                        {
+                            <!-- Finanse -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="finances" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-currency-dollar"></i> Finanse
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="finances">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Index">
+                                            <i class="bi bi-wallet2"></i> Spis Wydatków
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
+                                            <i class="bi bi-plus-circle"></i> Rejestr Płatności
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Costs" asp-action="Create">
+                                            <i class="bi bi-plus-circle"></i> Raporty Finansowe
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
 
-                        <!-- Pracownicy -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="employees" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-badge-fill"></i> Pracownicy
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="employees">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">
-                                        <i class="bi bi-people-fill"></i> Lista pracowników
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (ViewBag.Role == "Admin")
+                        {
+                            <!-- Pracownicy -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="employees" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-badge-fill"></i> Pracownicy
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="employees">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">
+                                            <i class="bi bi-people-fill"></i> Lista pracowników
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
 
                         @if (ViewBag.Username == null)
                         {

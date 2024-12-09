@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjektZespolowy.Data;
+using ProjektZespolowy.Models;
 
 namespace ProjektZespolowy
 {
@@ -25,35 +26,31 @@ namespace ProjektZespolowy
                 options.Cookie.IsEssential = true;
             });
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdminPolicy", policy =>
-                {
-                    policy.RequireRole("Admin");
-                });
-
-                options.AddPolicy("SprzedawcaPolicy", policy =>
-                {
-                    policy.RequireRole("Sprzedawca");
-                });
-
-                options.AddPolicy("MagazynierPolicy", policy =>
-                {
-                    policy.RequireRole("Magazynier");
-                });
-
-                options.AddPolicy("PracownikPolicy", policy =>
-                {
-                    policy.RequireRole("Pracownik");
-                });
-
-                options.AddPolicy("FinansistaPolicy", policy =>
-                {
-                    policy.RequireRole("Finansista");
-                });
-            });
-
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<ApplicationDbContext>();
+
+                if (!context.Employee.Any(e => e.Stanowisko == "Admin"))
+                {
+                    var adminUser = new Employee
+                    {
+                        PracownikID = 0,
+                        Imie = "Imie",
+                        Nazwisko = "Nazwisko",
+                        Stanowisko = "Admin",
+                        AdresEmail = "AdresEmail@AdresEmail.AdresEmail",
+                        AdresZamieszkania = "AdresZamieszkania",
+                        Login = "admin",
+                        Haslo = "admin",
+                    };
+
+                    context.Employee.Add(adminUser);
+                    context.SaveChanges();
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

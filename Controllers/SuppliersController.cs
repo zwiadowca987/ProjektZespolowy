@@ -21,6 +21,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Suppliers
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var suppliers = await _context.Suppliers.ToListAsync();
             return View(suppliers);
         }
@@ -28,6 +31,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -43,6 +49,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Suppliers/Create
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
@@ -51,6 +60,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DostawcaID,NazwaDostawcy,Adres,Kontakt")] Supplier supplier)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (ModelState.IsValid)
             {
                 try
@@ -70,6 +82,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Suppliers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -85,6 +100,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DostawcaID,NazwaDostawcy,Adres,Kontakt")] Supplier supplier)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != supplier.DostawcaID)
                 return NotFound();
 
@@ -110,6 +128,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Suppliers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -127,6 +148,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             try
             {
                 var supplier = await _context.Suppliers.FindAsync(id);

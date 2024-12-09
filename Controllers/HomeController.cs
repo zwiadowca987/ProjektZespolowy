@@ -16,19 +16,26 @@ namespace ProjektZespolowy.Controllers
 
         public IActionResult Index()
         {
-            var username = HttpContext.Session.GetString("Username");
-            ViewBag.Username = username;
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

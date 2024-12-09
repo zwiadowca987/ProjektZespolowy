@@ -23,12 +23,18 @@ namespace ProjektZespolowy.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View(await _context.Employee.ToListAsync());
         }
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -47,6 +53,9 @@ namespace ProjektZespolowy.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
@@ -54,6 +63,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PracownikID,Imie,Nazwisko,Stanowisko,AdresEmail,AdresZamieszkania,Login,Haslo")] Employee employee)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -75,6 +87,9 @@ namespace ProjektZespolowy.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -88,11 +103,13 @@ namespace ProjektZespolowy.Controllers
             return View(employee);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PracownikID,Imie,Nazwisko,Stanowisko,AdresEmail,AdresZamieszkania,Login,Haslo")] Employee employee)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != employee.PracownikID)
             {
                 return NotFound();
@@ -134,6 +151,9 @@ namespace ProjektZespolowy.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -155,6 +175,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var employee = await _context.Employee.FindAsync(id);
             if (employee != null)
             {
@@ -167,6 +190,9 @@ namespace ProjektZespolowy.Controllers
 
         public IActionResult LogIn()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
@@ -179,6 +205,7 @@ namespace ProjektZespolowy.Controllers
             {
                 // Authentication successful
                 HttpContext.Session.SetString("Username", userFromDb.Login);
+                HttpContext.Session.SetString("Role", userFromDb.Stanowisko);
                 return RedirectToAction("Index", "Home");
             }
             else

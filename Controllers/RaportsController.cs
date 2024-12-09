@@ -17,18 +17,22 @@ namespace ProjektZespolowy.Controllers
             _context = context;
         }
 
- 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var raports = await _context.Raports.Include(r => r.RaportItems).ToListAsync();
             return View(raports);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -42,13 +46,12 @@ namespace ProjektZespolowy.Controllers
             return View(raport);
         }
 
-
-
-
-
         [HttpGet]
         public IActionResult RaportKryt()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = _context.Warehouses.OrderBy(w => w.DostepnaIlosc).ToList();
             ViewData["Warehouses"] = warehouses;
 
@@ -59,17 +62,18 @@ namespace ProjektZespolowy.Controllers
             });
         }
 
-    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Typ,DataWygenerowania,Uwagi,RaportItems")] Raport raport)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (!ModelState.IsValid)
             {
                 return View("RaportKryt", raport);
             }
 
-         
             foreach (var item in raport.RaportItems)
             {
                 item.RaportId = raport.RaportId; 
@@ -86,6 +90,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RaportId,Typ,DataWygenerowania,Uwagi")] Raport raport)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != raport.RaportId)
             {
                 return NotFound();
@@ -119,6 +126,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -133,11 +143,13 @@ namespace ProjektZespolowy.Controllers
             return View(raport);
         }
 
-
         // GET: Raports/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -156,6 +168,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var raport = await _context.Raports
                 .Include(r => r.RaportItems)
                 .FirstOrDefaultAsync(r => r.RaportId == id);
@@ -173,6 +188,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public IActionResult RaportMag()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = _context.Warehouses.OrderBy(w => w.DostepnaIlosc).ToList();
             ViewData["Warehouses"] = warehouses;
 
@@ -188,6 +206,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMag([Bind("Typ,DataWygenerowania,Uwagi,RaportItems")] Raport raport)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (!ModelState.IsValid)
             {
                 return View("RaportMag", raport); 
@@ -206,6 +227,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductName(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {

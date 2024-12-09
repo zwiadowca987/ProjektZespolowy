@@ -20,14 +20,20 @@ namespace ProjektZespolowy.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View(await _context.Products.ToListAsync());
         }
+
         [HttpGet]
         public async Task<IActionResult> Search(string search)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var products = from p in _context.Products
                            select p;
-
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -39,10 +45,12 @@ namespace ProjektZespolowy.Controllers
             return PartialView("_ProductTable", await products.ToListAsync());
         }
 
-
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null) return NotFound();
 
             var product = await _context.Products
@@ -56,6 +64,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             return View();
         }
 
@@ -64,6 +75,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProduktId,NazwaProduktu,Opis,Producent,Cena")] Product product)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (ModelState.IsValid)
             {
                 if (_context.Products.Any(p => p.ProduktId == product.ProduktId))
@@ -102,6 +116,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null) return NotFound();
 
             var product = await _context.Products.FindAsync(id);
@@ -115,6 +132,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProduktId,NazwaProduktu,Opis,Producent,Cena")] Product product)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != product.ProduktId) return NotFound();
 
             if (ModelState.IsValid)
@@ -138,6 +158,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null) return NotFound();
 
             var product = await _context.Products.FirstOrDefaultAsync(m => m.ProduktId == id);
@@ -151,6 +174,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {

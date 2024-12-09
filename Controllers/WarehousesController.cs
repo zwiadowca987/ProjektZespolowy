@@ -21,6 +21,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             _context.ChangeTracker.Clear();
             var warehouses = _context.Warehouses
                 .Include(w => w.Product)
@@ -29,13 +32,14 @@ namespace ProjektZespolowy.Controllers
 
             return View(warehouses);
         }
-      
-
 
         // GET: Warehouses/Details/5
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -53,6 +57,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             ViewData["ProduktId"] = new SelectList(_context.Products, "ProduktId", "NazwaProduktu");
             return View();
         }
@@ -62,6 +69,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProduktId,DostepnaIlosc,Pojemnosc")] Warehouse warehouse)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (ModelState.IsValid)
             {
                 if (!_context.Products.Any(p => p.ProduktId == warehouse.ProduktId))
@@ -83,6 +93,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -103,6 +116,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProduktId,DostepnaIlosc,Pojemnosc,NazwaProduktu")] Warehouse warehouse)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id != warehouse.ProduktId)
                 return NotFound();
 
@@ -143,6 +159,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (id == null)
                 return NotFound();
 
@@ -160,6 +179,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouse = await _context.Warehouses.FindAsync(id);
 
             if (warehouse == null)
@@ -174,6 +196,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public IActionResult Przyjmij()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = new List<Warehouse>();
             return View(warehouses);
         }
@@ -183,6 +208,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ZapiszPrzyjecie(List<Warehouse> warehouses)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (warehouses == null || warehouses.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Brak danych do zapisania.");
@@ -229,6 +257,9 @@ namespace ProjektZespolowy.Controllers
         [HttpPost]
         public IActionResult AddProduct(Product product)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (ModelState.IsValid)
             {
                 _context.Products.Add(product);
@@ -249,11 +280,13 @@ namespace ProjektZespolowy.Controllers
             return View(product);
         }
 
-
         // GET: Warehouses/Aktualizacja
         [HttpGet]
         public async Task<IActionResult> Aktualizacja()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = await _context.Warehouses
                 .Include(w => w.Product)
                 .ToListAsync();
@@ -265,6 +298,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ZapiszAktualizacje(List<Warehouse> warehouses)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (warehouses == null || warehouses.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Brak danych do zapisania.");
@@ -291,6 +327,9 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductName(int id)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var product = await _context.Products.FirstOrDefaultAsync(p => p.ProduktId == id);
             if (product == null)
             {
@@ -302,13 +341,20 @@ namespace ProjektZespolowy.Controllers
         [HttpGet]
         public async Task<IActionResult> RaportKryt()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = await _context.Warehouses.Include(w => w.Product).ToListAsync();
             return View(warehouses);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ZapiszRaportKryt(List<Warehouse> warehouses)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (warehouses == null || warehouses.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Brak danych do zapisania.");
@@ -328,9 +374,13 @@ namespace ProjektZespolowy.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
         [HttpGet]
         public async Task<IActionResult> RaportMag()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var warehouses = await _context.Warehouses
                 .Include(w => w.Product)
                 .ToListAsync();
@@ -338,10 +388,12 @@ namespace ProjektZespolowy.Controllers
             return View(warehouses);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Stan()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             _context.ChangeTracker.Clear();
             var warehouses = _context.Warehouses
                 .Include(w => w.Product)
@@ -350,8 +402,6 @@ namespace ProjektZespolowy.Controllers
 
             return View(warehouses);
         }
-
-
 
         private bool WarehouseExists(int id)
         {

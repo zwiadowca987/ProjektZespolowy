@@ -19,6 +19,9 @@ namespace ProjektZespolowy.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var orders = await _context.Orders
                 .Include(o => o.Customer) 
                 .ToListAsync();
@@ -26,10 +29,12 @@ namespace ProjektZespolowy.Controllers
             return View(orders);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             var customers = await _context.Customers
                 .Select(c => new SelectListItem
                 {
@@ -54,6 +59,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,Date,Price,Status,OrderDetails")] Order order)
         {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
             if (!ModelState.IsValid)
             {
                 await LoadCustomersIntoViewDataAsync();
@@ -105,7 +113,6 @@ namespace ProjektZespolowy.Controllers
                 });
             }
 
-
             order.OrderDetails = validDetails;
             order.Price = totalPrice;
             _context.Update(order);
@@ -125,6 +132,9 @@ namespace ProjektZespolowy.Controllers
         }
         private async Task LoadCustomersIntoViewDataAsync()
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             var customers = await _context.Customers
                 .Select(c => new SelectListItem
                 {
@@ -134,13 +144,13 @@ namespace ProjektZespolowy.Controllers
             ViewData["Customers"] = customers;
         }
 
-
-
-
         // GET: Orders/Edit/5
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             var order = _context.Orders
                 .Include(o => o.Customer)
                 .Include(o => o.OrderDetails)
@@ -167,6 +177,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Order order)
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             if (id != order.OrderId)
             {
                 return NotFound();
@@ -210,11 +223,12 @@ namespace ProjektZespolowy.Controllers
             return _context.Orders.Any(e => e.OrderId == id);
         }
 
-
-
         // GET: Orders/Details/5
         public IActionResult Details(int id)
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             var order = _context.Orders
                 .Include(o => o.OrderDetails) 
                 .ThenInclude(od => od.Product) 
@@ -229,12 +243,13 @@ namespace ProjektZespolowy.Controllers
             return View(order);
         }
 
-
-
         // GET: Orders/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             if (id == null)
             {
                 return NotFound();
@@ -258,6 +273,9 @@ namespace ProjektZespolowy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
             var order = await _context.Orders.FindAsync(id);
             if (order != null)
             {

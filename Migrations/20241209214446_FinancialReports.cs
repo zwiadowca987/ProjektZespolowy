@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektZespolowy.Migrations
 {
     /// <inheritdoc />
-    public partial class NoLogin : Migration
+    public partial class FinancialReports : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,6 +59,20 @@ namespace ProjektZespolowy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employee", x => x.PracownikID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialReports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +139,29 @@ namespace ProjektZespolowy.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialReportItems",
+                columns: table => new
+                {
+                    RaportItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RaportId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Flow = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FinancialReportId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialReportItems", x => x.RaportItemId);
+                    table.ForeignKey(
+                        name: "FK_FinancialReportItems_FinancialReports_RaportId",
+                        column: x => x.RaportId,
+                        principalTable: "FinancialReports",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -227,6 +264,11 @@ namespace ProjektZespolowy.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FinancialReportItems_RaportId",
+                table: "FinancialReportItems",
+                column: "RaportId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",
                 table: "OrderDetails",
                 column: "ProductId");
@@ -262,6 +304,9 @@ namespace ProjektZespolowy.Migrations
                 name: "Employee");
 
             migrationBuilder.DropTable(
+                name: "FinancialReportItems");
+
+            migrationBuilder.DropTable(
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
@@ -269,6 +314,9 @@ namespace ProjektZespolowy.Migrations
 
             migrationBuilder.DropTable(
                 name: "RaportItems");
+
+            migrationBuilder.DropTable(
+                name: "FinancialReports");
 
             migrationBuilder.DropTable(
                 name: "Orders");

@@ -23,7 +23,7 @@ namespace ProjektZespolowy.Controllers
             ViewBag.Role = HttpContext.Session.GetString("Role");
 
             var orders = await _context.Orders
-                .Include(o => o.Customer) 
+                .Include(o => o.Customer)
                 .ToListAsync();
 
             return View(orders);
@@ -76,7 +76,7 @@ namespace ProjektZespolowy.Controllers
                 return View(order);
             }
 
-            order.Price = 0; 
+            order.Price = 0;
             _context.Orders.Add(order);
 
             try
@@ -187,7 +187,7 @@ namespace ProjektZespolowy.Controllers
 
             if (!ModelState.IsValid)
             {
-  
+
                 ViewData["Customers"] = _context.Customers
                     .Select(c => new SelectListItem
                     {
@@ -230,9 +230,9 @@ namespace ProjektZespolowy.Controllers
             HttpContext.Session.GetString("Role");
 
             var order = _context.Orders
-                .Include(o => o.OrderDetails) 
-                .ThenInclude(od => od.Product) 
-                .Include(o => o.Customer) 
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Customer)
                 .FirstOrDefault(o => o.OrderId == id);
 
             if (order == null)
@@ -284,6 +284,19 @@ namespace ProjektZespolowy.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Completed()
+        {
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
+
+            var orders = await _context.Orders
+                .Include(o => o.Customer)
+                .Where(o => o.Status == "Ukończone")
+                .ToListAsync();
+
+            return View(orders);
         }
     }
 }

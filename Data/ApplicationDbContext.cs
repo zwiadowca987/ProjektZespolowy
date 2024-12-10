@@ -14,6 +14,8 @@ namespace ProjektZespolowy.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Raport> Raports { get; set; }
         public DbSet<RaportItem> RaportItems { get; set; }
+        public DbSet<FinancialReport> FinancialReports { get; set; }
+        public DbSet<FinancialReportItem> FinancialReportItems { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
@@ -50,6 +52,12 @@ namespace ProjektZespolowy.Data
             builder.Entity<Raport>()
                 .HasMany(r => r.RaportItems)
                 .WithOne(ri => ri.Raport)
+                .HasForeignKey(ri => ri.RaportId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<FinancialReport>()
+                .HasMany(r => r.FinancialReportItems)
+                .WithOne(ri => ri.FinancialReport)
                 .HasForeignKey(ri => ri.RaportId)
                 .OnDelete(DeleteBehavior.Cascade);
 

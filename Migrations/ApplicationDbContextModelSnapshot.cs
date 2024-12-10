@@ -133,6 +133,58 @@ namespace ProjektZespolowy.Migrations
                     b.ToTable("Employee");
                 });
 
+            modelBuilder.Entity("ProjektZespolowy.Models.FinancialReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("CreationDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialReports");
+                });
+
+            modelBuilder.Entity("ProjektZespolowy.Models.FinancialReportItem", b =>
+                {
+                    b.Property<int>("RaportItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RaportItemId"));
+
+                    b.Property<int?>("FinancialReportId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Flow")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RaportId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("RaportItemId");
+
+                    b.HasIndex("RaportId");
+
+                    b.ToTable("FinancialReportItems");
+                });
+
             modelBuilder.Entity("ProjektZespolowy.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -341,6 +393,17 @@ namespace ProjektZespolowy.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ProjektZespolowy.Models.FinancialReportItem", b =>
+                {
+                    b.HasOne("ProjektZespolowy.Models.FinancialReport", "FinancialReport")
+                        .WithMany("FinancialReportItems")
+                        .HasForeignKey("RaportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FinancialReport");
+                });
+
             modelBuilder.Entity("ProjektZespolowy.Models.Order", b =>
                 {
                     b.HasOne("ProjektZespolowy.Models.Customer", "Customer")
@@ -396,6 +459,11 @@ namespace ProjektZespolowy.Migrations
             modelBuilder.Entity("ProjektZespolowy.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ProjektZespolowy.Models.FinancialReport", b =>
+                {
+                    b.Navigation("FinancialReportItems");
                 });
 
             modelBuilder.Entity("ProjektZespolowy.Models.Order", b =>

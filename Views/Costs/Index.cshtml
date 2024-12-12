@@ -4,73 +4,78 @@
     ViewData["Title"] = "Finanse - Koszta";
 }
 
-<h1>Koszta Prowadzenia Działalności</h1>
-
-<p>
-    <a asp-action="Create">Dodaj Nowy Koszt</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nazwa
-            </th>
-            <th>
-                Kwota
-            </th>
-            <th>
-                Data Płatności
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cost) PLN
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Period)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
-<div class="d-flex align-items-center justify-content-around">
-    <div class="col-2"></div>
-
-    <div class="col-2">
-        <label><b>Typ Wykresu</b></label>
+<div class="container m-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">Koszta Prowadzenia Działalności</h1>
+        <a asp-action="Create" class="btn btn-success">Dodaj Nowy Koszt</a>
     </div>
 
-    <div class="col-2">
-        <select id="ChartType" class="form-control">
-            <option selected>-Wybierz Typ Wykresu-</option>
-            <option>Wykres Kolumnowy</option>
-            <option>Wykres Liniowy</option>
-            <option>Wykres Kołowy</option>
-            <option>Wykres Pierścieniowy</option>
-        </select>
+    <table class="table table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    Nazwa
+                </th>
+                <th>
+                    Kwota
+                </th>
+                <th>
+                    Data Płatności
+                </th>
+                <th>
+                    Akcje
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cost) PLN
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Period)
+                    </td>
+                    <td>
+                        <div class ="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edytuj</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Usuń</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex align-items-center justify-content-around">
+        <div class="col-2"></div>
+
+        <div class="col-2">
+            <label><b>Typ Wykresu</b></label>
+        </div>
+
+        <div class="col-2">
+            <select id="ChartType" class="form-control">
+                <option selected>-Wybierz Typ Wykresu-</option>
+                <option>Wykres Kolumnowy</option>
+                <option>Wykres Liniowy</option>
+                <option>Wykres Kołowy</option>
+                <option>Wykres Pierścieniowy</option>
+            </select>
+        </div>
+
+        <div class="col-2"></div>
+
+        <div class="col-2">
+            <input id="showChartBtn" class="btn btn-success" value="Show Graph" type="button" />
+        </div>
+
+        <div class="col-3"></div>
     </div>
-
-    <div class="col-2"></div>
-
-    <div class="col-2">
-        <input id="showChartBtn" value="Show Graph" type="button" />
-    </div>
-
-    <div class="col-3"></div>
 </div>
 
 <script>
@@ -138,7 +143,6 @@
             function OnError(err) {
 
             }
-            
         })
     })
 </script>

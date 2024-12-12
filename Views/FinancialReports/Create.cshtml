@@ -4,47 +4,61 @@
     ViewData["Title"] = "Utwórz Nowy Raport";
 }
 
-<div class="container">
-    <h1>@ViewData["Title"]</h1>
-    <hr />
-    <div class="container">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label">Nazwa Raportu</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label">Data Utworzenia</label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
+<div class="container mt-4">
+    <h1 class="text-center text-success mb-4">@ViewData["Title"]</h1>
 
-            <h4 class="text-success">Pozycje w raporcie finansowym</h4>
-            <table class="table table-bordered table-hover" id="raportItemsTable">
-                <thead class="table-success">
-                    <tr>
-                        <th>ID Pozycji</th>
-                        <th>Nazwa Pozycji</th>
-                        <th>Wartość</th>
-                        <th>Typ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr></tr>
-                </tbody>
-            </table>
-            <button type="button" id="addRowButton" class="btn btn-primary mb-3">Dodaj wiersz</button>
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Formularz generowania nowego raportu</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" asp-controller="FinancialReports" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label">Nazwa</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="CreationDate" class="control-label">Data Utworzenia</label>
+                    <input asp-for="CreationDate" class="form-control" />
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Utwórz" class="btn btn-primary" />
-            </div>
-        </form>
+                <h4 class="text-success">Pozycje w raporcie finansowym</h4>
+                <table class="table table-bordered table-hover" id="raportItemsTable">
+                    <thead class="table-success">
+                        <tr>
+                            <th>ID Pozycji</th>
+                            <th>Nazwa Pozycji</th>
+                            <th>Wartość</th>
+                            <th>Typ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr></tr>
+                    </tbody>
+                </table>
+
+                <button type="button" id="addRowButton" class="btn btn-primary mb-3">Dodaj wiersz</button>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Zapisz</button>
+                    <a asp-action="Index" asp-controller="FinancialReports" class="btn btn-secondary">Powrót</a>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div>
-        <a asp-action="Index">Powrót</a>
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Informacja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="alertModalMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -71,7 +85,10 @@
                                             <input type="number" class="form-control value" name="FinancialReportItems[${rowCount}].Value" required />
                                 </td>
                                 <td>
-                                            <input type="text" class="form-control flow" name="FinancialReportItems[${rowCount}].Flow" required />
+                                            <select class="form-control flow" name="FinancialReportItems[${rowCount}].Flow" required>
+                                                <option value="Dochód">Dochód</option>
+                                                <option value="Koszt">Koszt</option>
+                                            </select>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger" onclick="removeRow(this)">Usuń</button>
@@ -114,7 +131,7 @@
 
                     if (response.ok) {
                         showModal('success', '✔️ Raport finansowy został zapisany.');
-                        setTimeout(() => window.location.href = '@Url.Action("Index", "Raports")', 2000);
+                        setTimeout(() => window.location.href = '@Url.Action("Index", "FinancialReports")', 2000);
                     } else {
                         const errorText = await response.text();
                         showModal('danger', `❌ Nie udało się zapisać raportu. Szczegóły: ${errorText}`);

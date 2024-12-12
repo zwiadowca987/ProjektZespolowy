@@ -55,8 +55,8 @@ namespace ProjektZespolowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("Period")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Period")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -141,8 +141,8 @@ namespace ProjektZespolowy.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("CreationDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()

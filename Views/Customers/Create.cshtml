@@ -73,6 +73,20 @@
                 event.preventDefault();
 
                 const formData = new FormData(form);
+                const requiredFields = ['Imie', 'Nazwisko', 'Adres', 'Email'];
+                const emptyFields = [];
+
+                requiredFields.forEach(field => {
+                    const value = formData.get(field)?.trim();
+                    if (!value) {
+                        emptyFields.push(field);
+                    }
+                });
+
+                if (emptyFields.length > 0) {
+                    showModal('danger', `❌ Wypełnij wszystkie pola: ${emptyFields.join(', ')}.`);
+                    return;
+                }
 
                 try {
                     const response = await fetch(form.action, {
@@ -88,7 +102,7 @@
                         setTimeout(() => window.location.href = '@Url.Action("Index", "Customers")', 2000);
                     } else {
                         const errorText = await response.text();
-                        showModal('danger', `❌ Nie udało się. Szczegóły: ${errorText}`);
+                        showModal('danger', `❌ Nie udało się dodać klienta. Szczegóły: ${errorText}`);
                     }
                 } catch (error) {
                     showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
@@ -103,4 +117,3 @@
         });
     </script>
 }
-

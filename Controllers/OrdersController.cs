@@ -243,6 +243,25 @@ namespace ProjektZespolowy.Controllers
             return View(order);
         }
 
+        public IActionResult DetailsCompleted(int id)
+        {
+            HttpContext.Session.GetString("Username");
+            HttpContext.Session.GetString("Role");
+
+            var order = _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Customer)
+                .FirstOrDefault(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
         // GET: Orders/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)

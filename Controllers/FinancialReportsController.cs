@@ -63,18 +63,32 @@ namespace ProjektZespolowy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,CreationDate")] FinancialReport financialReport)
+        public async Task<IActionResult> Create([Bind("Id,Name,CreationDate,FinancialReportItems")] FinancialReport financialReport)
         {
             ViewBag.Username = HttpContext.Session.GetString("Username");
             ViewBag.Role = HttpContext.Session.GetString("Role");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(financialReport);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(financialReport);
+
+            var validDetails = new List<FinancialReportItem>();
+            foreach (var detail in financialReport.FinancialReportItems)
+            {
+                validDetails.Add(new FinancialReportItem
+                {
+                    RaportItemId = detail.RaportItemId,
+                    Name = detail.Name,
+                    Value = detail.Value,
+                    Flow = detail.Flow,
+                });
+            }
+
+            _context.Add(financialReport);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: FinancialReports/Edit/5

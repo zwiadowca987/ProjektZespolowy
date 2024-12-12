@@ -1,6 +1,7 @@
 ﻿html, body {
     height: 100%;
     margin: 0;
+    background-image: url('../images/blue-snow.webp');
 }
 
 body {
@@ -103,4 +104,14 @@ header {
     .dropdown-menu {
         animation: none;
     }
+}
+
+.img-logo {
+    width: 50px;
+}
+
+.img-carousel {
+    width: 50%;
+    margin: 10px;
+    height: auto;
 }

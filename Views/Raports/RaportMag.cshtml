@@ -96,20 +96,20 @@
                 const newRow = document.createElement('tr');
 
                 newRow.innerHTML = `
-                    <td>
-                        <input type="number" class="form-control produkt-id" name="RaportItems[${rowCount}].ProduktId"
-                               oninput="fetchProductName(this)" required />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control nazwa-produktu" name="RaportItems[${rowCount}].NazwaProduktu" readonly />
-                    </td>
-                    <td>
-                        <input type="number" class="form-control" name="RaportItems[${rowCount}].Ilosc" required />
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger" onclick="removeRow(this)">Usuń</button>
-                    </td>
-                `;
+                            <td>
+                                <input type="number" class="form-control produkt-id" name="RaportItems[${rowCount}].ProduktId"
+                                       oninput="fetchProductName(this)" required />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control nazwa-produktu" name="RaportItems[${rowCount}].NazwaProduktu" readonly />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="RaportItems[${rowCount}].Ilosc" required />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Usuń</button>
+                            </td>
+                        `;
 
                 tableBody.appendChild(newRow);
             });
@@ -157,6 +157,38 @@
                 event.preventDefault();
 
                 const formData = new FormData(form);
+
+
+                let isValid = true;
+                let errorMessage = '';
+
+
+                const uwagiField = formData.get('Uwagi')?.trim();
+                if (!uwagiField) {
+                    isValid = false;
+                    errorMessage += 'Pole "Uwagi" jest wymagane.<br>';
+                }
+
+
+                const rows = document.querySelectorAll('#raportItemsTable tbody tr');
+                rows.forEach((row, index) => {
+                    const produktId = row.querySelector('.produkt-id').value.trim();
+                    const ilosc = row.querySelector('[name$=".Ilosc"]').value.trim();
+
+                    if (!produktId) {
+                        isValid = false;
+                        errorMessage += `Wiersz ${index + 1}: Pole "ID Produktu" jest wymagane.<br>`;
+                    }
+                    if (!ilosc) {
+                        isValid = false;
+                        errorMessage += `Wiersz ${index + 1}: Pole "Ilość" jest wymagane.<br>`;
+                    }
+                });
+
+                if (!isValid) {
+                    showModal('danger', `❌ Formularz zawiera błędy:<br>${errorMessage}`);
+                    return;
+                }
 
                 try {
                     const response = await fetch(form.action, {

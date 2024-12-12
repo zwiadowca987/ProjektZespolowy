@@ -1,0 +1,109 @@
+﻿@model ProjektZespolowy.Models.Order
+
+@{
+    ViewData["Title"] = "Szczegóły Zamówienia";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-success mb-4">@ViewData["Title"]</h1>
+
+    <div class="card shadow-sm border-success">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Informacje o zamówieniu</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">ID Zamówienia</dt>
+                <dd class="col-sm-8">@Model.OrderId</dd>
+
+                <dt class="col-sm-4 fw-bold">Klient</dt>
+                <dd class="col-sm-8">
+                    @if (Model.Customer != null)
+                    {
+                        @($"{Model.Customer.Imie} {Model.Customer.Nazwisko}")
+                    }
+                    else
+                    {
+                        @Model.CustomerId
+                    }
+                </dd>
+
+
+
+                <dt class="col-sm-4 fw-bold">Data Zamówienia</dt>
+                <dd class="col-sm-8">@Model.Date.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+
+                <dt class="col-sm-4 fw-bold">Łączna Cena</dt>
+                <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+                <dt class="col-sm-4 fw-bold">Status</dt>
+                <dd class="col-sm-8">@Model.Status</dd>
+            </dl>
+        </div>
+    </div>
+
+    <h4 class="text-success mt-4">Pozycje zamówienia</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-success">
+            <tr>
+                <th>ID Produktu</th>
+                <th>Nazwa Produktu</th>
+                <th>Ilość</th>
+                <th>Cena za sztukę</th>
+                <th>Wartość</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+            {
+                decimal totalValue = 0; 
+
+                foreach (var item in Model.OrderDetails)
+                {
+                    decimal itemValue = item.Quantity * (item.Product?.Cena ?? 0);
+                    totalValue += itemValue; 
+
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>
+                            @if (item.Product != null)
+                            {
+                                @item.Product.NazwaProduktu
+                            }
+                            else
+                            {
+                                <em>Brak danych o produkcie</em>
+                            }
+                        </td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            @if (item.Product != null)
+                            {
+                                @item.Product.Cena.ToString("C")
+                            }
+                            else
+                            {
+                                <em>Brak ceny</em>
+                            }
+                        </td>
+                        <td>@itemValue.ToString("C")</td> 
+                    </tr>
+                }
+                <tr class="table-success">
+                    <td colspan="4" class="text-end fw-bold">Łączna wartość:</td>
+                    <td class="fw-bold">@totalValue.ToString("C")</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center">Brak szczegółów zamówienia.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a asp-action="Completed" class="btn btn-secondary">Powrót do listy</a>
+    </div>
+</div>

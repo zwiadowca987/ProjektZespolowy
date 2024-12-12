@@ -5,46 +5,46 @@
 }
 
 <div class="container mt-4">
-    <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-primary">@ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-success">Dodaj Nowy Raport</a>
+    </div>
 
-    <p><a asp-action="Create">Utwórz Raport</a></p>
+    <div class="table-responsive" style="border-radius: 10px; overflow: hidden;">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Raportu</th>
+                    <th>Nazwa</th>
+                    <th>Data Wygenerowania</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var raport in Model)
+                {
+                    <tr>
+                        <td>@raport.Id</td>
+                        <td>@raport.Name</td>
+                        <td>@raport.CreationDate</td>
 
-    <div class="card shadow-sm border-primary">
-        <div class="card-body">
-            <div class="table-responsive" style="border-radius: 10px; overflow: hidden;">
-                <table class="table table-bordered table-hover">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>ID Raportu</th>
-                            <th>Nazwa</th>
-                            <th>Data Wygenerowania</th>
-                            <th>Akcje</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var raport in Model)
-                        {
-                            <tr>
-                                <td>@raport.Id</td>
-                                <td>@raport.Name</td>
-                                <td>@raport.CreationDate.ToString("yyyy-MM-dd")</td>
-                                
-                                <td class="d-flex gap-2">
-                                    <a asp-action="Details" asp-route-id="@raport.Id" class="btn btn-info btn-sm">
-                                        <i class="bi bi-eye"></i> Szczegóły
-                                    </a>
-                                    <a asp-action="Edit" asp-route-id="@raport.Id" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-pencil"></i> Edytuj
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@raport.Id" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Usuń
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Details" asp-route-id="@raport.Id" class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye"></i> Szczegóły
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@raport.Id" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Edytuj
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@raport.Id" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Usuń
+                                </a>
+                            </div>
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

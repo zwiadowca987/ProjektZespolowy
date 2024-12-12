@@ -7,7 +7,7 @@ namespace ProjektZespolowy.Models
         [Key, Required]
         public int Id { get; set; }
         public String Name { get; set; }
-        public DateOnly CreationDate { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
         public ICollection<FinancialReportItem> FinancialReportItems { get; set; } = new List<FinancialReportItem>();
     }
 }

@@ -91,44 +91,58 @@
 
 @section Scripts {
     <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const form = document.getElementById('addForm');
-                    const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-                    const alertModalMessage = document.getElementById('alertModalMessage');
-                    const alertModalLabel = document.getElementById('alertModalLabel');
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('addForm');
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            const alertModalMessage = document.getElementById('alertModalMessage');
+            const alertModalLabel = document.getElementById('alertModalLabel');
 
-                    form.addEventListener('submit', async function (event) {
-                        event.preventDefault();
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
 
-                        const formData = new FormData(form);
+                const formData = new FormData(form);
+                const requiredFields = ['Imie', 'Nazwisko', 'Stanowisko', 'AdresEmail', 'AdresZamieszkania', 'Login', 'Haslo'];
+                const emptyFields = [];
 
-                        try {
-                            const response = await fetch(form.action, {
-                                method: 'POST',
-                                body: formData,
-                                headers: {
-                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                                }
-                            });
+                requiredFields.forEach(field => {
+                    const value = formData.get(field)?.trim();
+                    if (!value) {
+                        emptyFields.push(field);
+                    }
+                });
 
-                            if (response.ok) {
-                                showModal('success', '✔️ Pracownik dodany do bazy.');
-                                setTimeout(() => window.location.href = '@Url.Action("Index", "Employees")', 2000);
-                            } else {
-                                const errorText = await response.text();
-                                showModal('danger', `❌ Nie udało się utworzyć zamówienia. Szczegóły: ${errorText}`);
-                            }
-                        } catch (error) {
-                            showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                if (emptyFields.length > 0) {
+                    showModal('danger', `❌ Wypełnij wszystkie pola: ${emptyFields.join(', ')}.`);
+                    return;
+                }
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                         }
                     });
 
-                    function showModal(type, message) {
-                        alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
-                        alertModalMessage.innerHTML = message;
-                        alertModal.show();
+                    if (response.ok) {
+                        showModal('success', '✔️ Pracownik dodany do bazy.');
+                        setTimeout(() => window.location.href = '@Url.Action("Index", "Employees")', 2000);
+                    } else {
+                        const errorText = await response.text();
+                        showModal('danger', `❌ Nie udało się dodać pracownika. Szczegóły: ${errorText}`);
                     }
-                });
+                } catch (error) {
+                    showModal('danger', `❌ Wystąpił błąd: ${error.message}`);
+                }
+            });
+
+            function showModal(type, message) {
+                alertModalLabel.textContent = type === 'success' ? 'Sukces' : 'Błąd';
+                alertModalMessage.innerHTML = message;
+                alertModal.show();
+            }
+        });
     </script>
 }
 

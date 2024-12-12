@@ -1,12 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Elektro Expert";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @if (ViewBag.Username != null)
-    {
-        <p>Hello, @ViewBag.Username!</p>
-    }
+<div class="container mt-4">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active text-center">
+                <img src="/images/obsługa-sprzedaży.png" class="img-fluid d-block mx-auto img-carousel" alt="Gdańsk">
+                <div class="carousel-caption d-none d-lg-block bg-success bg-gradient">
+                    <h5>Obsługa Sprzedaży</h5>
+                    <p>Kompleksowe wsparcie i obsługa klienta</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/obsługa-zamówień.png" class="img-fluid d-block mx-auto img-carousel" alt="Londyn">
+                <div class="carousel-caption d-none d-lg-block bg-success bg-gradient">
+                    <h5>Obsługa Zamówień</h5>
+                    <p>Sprawna realizacja i komunikacja międzymodułowa</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/zarządzanie-magazynem.png" class="img-fluid d-block mx-auto img-carousel" alt="Paryż">
+                <div class="carousel-caption d-none d-lg-block bg-success bg-gradient">
+                    <h5>Zarządzanie Magazynem</h5>
+                    <p>Kontrola, monitorowanie i realizacja zleceń </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/zarzadzanie-finansami.png" class="img-fluid d-block mx-auto img-carousel" alt="Nowy Jork">
+                <div class="carousel-caption d-none d-lg-block bg-success bg-gradient">
+                    <h5>Zarządzanie Finansami</h5>
+                    <p>Bieżąca kontrola i analityka sytuacji przedsiębiorstwa</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/Pracownicy.png" class="img-fluid d-block mx-auto img-carousel" alt="Tokio">
+                <div class="carousel-caption d-none d-lg-block bg-success bg-gradient">
+                    <h5>Obsługa Pracownika</h5>
+                    <p>Administrowanie systemu i danych pracowniczych</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>

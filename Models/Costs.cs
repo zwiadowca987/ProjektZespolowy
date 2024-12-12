@@ -8,6 +8,6 @@ namespace ProjektZespolowy.Models
         public int Id { get; set; }
         public String Name { get; set; }
         public decimal Cost { get; set; }
-        public DateOnly Period { get; set; }
+        public DateTime Period { get; set; } = DateTime.Now;
     }
 }

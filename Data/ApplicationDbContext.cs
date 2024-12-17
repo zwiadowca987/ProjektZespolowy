@@ -55,11 +55,10 @@ namespace ProjektZespolowy.Data
                 .HasForeignKey(ri => ri.RaportId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<FinancialReport>()
-                .HasMany(r => r.FinancialReportItems)
-                .WithOne(ri => ri.FinancialReport)
-                .HasForeignKey(ri => ri.RaportId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<FinancialReportItem>()
+                .HasOne(fri => fri.FinancialReport)
+                .WithMany(fr => fr.FinancialReportItems)
+                .HasForeignKey(fri => fri.FinancialReportId);
 
             builder.Entity<Customer>()
                 .HasMany(c => c.Orders)

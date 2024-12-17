@@ -6,11 +6,9 @@ namespace ProjektZespolowy.Models
     public class FinancialReportItem
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RaportItemId { get; set; }
-
+        public int FinancialReportItemId { get; set; }
         [Required]
-        public int RaportId { get; set; }
+        public int FinancialReportId { get; set; }
 
         [Required]
         public String Name { get; set; }
@@ -21,7 +19,6 @@ namespace ProjektZespolowy.Models
         [Required]
         public String Flow {  get; set; }
 
-        [ForeignKey("FinancialReportId")]
         public FinancialReport? FinancialReport { get; set; }
     }
 }

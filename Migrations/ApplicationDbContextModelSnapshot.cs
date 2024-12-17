@@ -155,13 +155,13 @@ namespace ProjektZespolowy.Migrations
 
             modelBuilder.Entity("ProjektZespolowy.Models.FinancialReportItem", b =>
                 {
-                    b.Property<int>("RaportItemId")
+                    b.Property<int>("FinancialReportItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RaportItemId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FinancialReportItemId"));
 
-                    b.Property<int?>("FinancialReportId")
+                    b.Property<int>("FinancialReportId")
                         .HasColumnType("int");
 
                     b.Property<string>("Flow")
@@ -172,15 +172,12 @@ namespace ProjektZespolowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RaportId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("RaportItemId");
+                    b.HasKey("FinancialReportItemId");
 
-                    b.HasIndex("RaportId");
+                    b.HasIndex("FinancialReportId");
 
                     b.ToTable("FinancialReportItems");
                 });
@@ -397,7 +394,7 @@ namespace ProjektZespolowy.Migrations
                 {
                     b.HasOne("ProjektZespolowy.Models.FinancialReport", "FinancialReport")
                         .WithMany("FinancialReportItems")
-                        .HasForeignKey("RaportId")
+                        .HasForeignKey("FinancialReportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

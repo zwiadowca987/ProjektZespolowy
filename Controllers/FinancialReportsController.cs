@@ -25,7 +25,7 @@ namespace ProjektZespolowy.Controllers
             ViewBag.Username = HttpContext.Session.GetString("Username");
             ViewBag.Role = HttpContext.Session.GetString("Role");
 
-            return View(await _context.FinancialReports.ToListAsync());
+            return View(await _context.FinancialReports.Include(r => r.FinancialReportItems).ToListAsync());
         }
 
         // GET: FinancialReports/Details/5
@@ -40,6 +40,7 @@ namespace ProjektZespolowy.Controllers
             }
 
             var financialReport = await _context.FinancialReports
+                .Include(fri => fri.FinancialReportItems)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (financialReport == null)
             {
@@ -78,7 +79,7 @@ namespace ProjektZespolowy.Controllers
             {
                 validDetails.Add(new FinancialReportItem
                 {
-                    RaportItemId = detail.RaportItemId,
+                    FinancialReportId = detail.FinancialReportId,
                     Name = detail.Name,
                     Value = detail.Value,
                     Flow = detail.Flow,

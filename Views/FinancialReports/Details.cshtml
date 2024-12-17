@@ -26,23 +26,11 @@
     <table class="table table-bordered table-striped">
         <thead class="table-success">
             <tr>
-                <th>ID</th>
                 <th>Nazwa</th>
-                <th>Kwota</th>
                 <th>Typ</th>
+                <th>Kwota</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model.FinancialReportItems)
-            {
-                <tr>
-                    <td>@item.RaportId</td>
-                    <td>@item.Name</td>
-                    <td>@item.Value</td>
-                    <td>@item.Flow</td>
-                </tr>
-            }
-        </tbody>
         <tbody>
             @if (Model.FinancialReportItems != null && Model.FinancialReportItems.Any())
             {
@@ -53,21 +41,20 @@
                     totalValue += item.Value * (item.Flow == "Dochód" ? 1 : -1);
 
                     <tr>
-                        <td>@item.RaportId</td>
                         <td>@item.Name</td>
-                        <td>@item.Value.ToString("C")</td>
                         <td>@item.Flow</td>
+                        <td>@item.Value.ToString("C")</td>
                     </tr>
                 }
                 <tr class="table-success">
-                    <td colspan="4" class="text-end fw-bold">Podsumowanie:</td>
+                    <td colspan="2" class="text-end fw-bold">Podsumowanie:</td>
                     <td class="fw-bold">@totalValue.ToString("C")</td>
                 </tr>
             }
             else
             {
                 <tr>
-                    <td colspan="5" class="text-center">Brak szczegółów raportu.</td>
+                    <td colspan="4" class="text-center">Brak szczegółów raportu.</td>
                 </tr>
             }
         </tbody>
